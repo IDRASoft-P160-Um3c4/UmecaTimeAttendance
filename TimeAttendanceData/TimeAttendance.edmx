@@ -1,0 +1,582 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TimeAttendanceModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.5" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2006/04/edm/ssdl">
+        <EntityType Name="attendancelog">
+          <Key>
+            <PropertyRef Name="id_attendancelog" />
+          </Key>
+          <Property Name="id_attendancelog" Type="bigint" Nullable="false" />
+          <Property Name="eventtime" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="workcode" Type="smallint" Nullable="false" />
+          <Property Name="id_employee" Type="bigint" />
+        </EntityType>
+        <EntityType Name="cat_device">
+          <Key>
+            <PropertyRef Name="id_device" />
+          </Key>
+          <Property Name="id_device" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ip" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="is_obsolete" Type="bool" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="port" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="id_employee" />
+          </Key>
+          <Property Name="id_employee" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="birth_date" Type="datetime" Precision="0" />
+          <Property Name="create_date" Type="datetime" Precision="0" />
+          <Property Name="date_obsolete" Type="datetime" Precision="0" />
+          <Property Name="gender" Type="bool" />
+          <Property Name="is_obsolete" Type="bool" />
+          <Property Name="last_name_m" Type="varchar" MaxLength="255" />
+          <Property Name="last_name_p" Type="varchar" MaxLength="255" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="id_district" Type="bigint" />
+          <Property Name="id_general_data" Type="bigint" />
+          <Property Name="id_generic_file" Type="bigint" />
+          <Property Name="id_role" Type="bigint" />
+          <Property Name="id_user_obsolete" Type="bigint" />
+          <Property Name="id_employee_schedule" Type="bigint" />
+        </EntityType>
+        <EntityType Name="employee_general_data">
+          <Key>
+            <PropertyRef Name="id_employee_general_data" />
+          </Key>
+          <Property Name="id_employee_general_data" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="appointment" Type="varchar" MaxLength="255" />
+          <Property Name="certificate" Type="varchar" MaxLength="255" />
+          <Property Name="date_entry_umeca" Type="datetime" Precision="0" />
+          <Property Name="date_public_serv" Type="datetime" Precision="0" />
+          <Property Name="dependents" Type="varchar" MaxLength="255" />
+          <Property Name="email" Type="varchar" MaxLength="255" />
+          <Property Name="identification_desc" Type="varchar" MaxLength="255" />
+          <Property Name="isCommissioner" Type="bool" />
+          <Property Name="no_employee" Type="varchar" MaxLength="255" />
+          <Property Name="no_imss" Type="varchar" MaxLength="255" />
+          <Property Name="phone" Type="varchar" MaxLength="255" />
+          <Property Name="id_address" Type="bigint" />
+          <Property Name="id_document_type" Type="bigint" />
+          <Property Name="id_marital_status" Type="bigint" />
+        </EntityType>
+        <EntityType Name="employee_reference">
+          <Key>
+            <PropertyRef Name="id_employee_reference" />
+          </Key>
+          <Property Name="id_employee_reference" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="age" Type="varchar" MaxLength="255" />
+          <Property Name="name" Type="varchar" MaxLength="255" />
+          <Property Name="phone" Type="varchar" MaxLength="255" />
+          <Property Name="spec_relationship" Type="varchar" MaxLength="255" />
+          <Property Name="time_ago" Type="varchar" MaxLength="255" />
+          <Property Name="id_employee" Type="bigint" />
+          <Property Name="id_relationship" Type="bigint" />
+        </EntityType>
+        <EntityType Name="fingerprints">
+          <Key>
+            <PropertyRef Name="id_fingerprint" />
+          </Key>
+          <Property Name="id_fingerprint" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="data" Type="varchar" MaxLength="2048" Nullable="false" />
+          <Property Name="finger" Type="smallint" Nullable="false" />
+          <Property Name="id_employee" Type="bigint" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id_user" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="enabled" Type="bool" Nullable="false" />
+          <Property Name="fullname" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.umeca.user_role' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="user_role">
+          <Key>
+            <PropertyRef Name="id_user" />
+            <PropertyRef Name="id_role" />
+          </Key>
+          <Property Name="id_user" Type="bigint" Nullable="false" />
+          <Property Name="id_role" Type="bigint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK11A0340F5FA92D81">
+          <End Role="employee" Type="Self.employee" Multiplicity="0..1" />
+          <End Role="fingerprints" Type="Self.fingerprints" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="id_employee" />
+            </Principal>
+            <Dependent Role="fingerprints">
+              <PropertyRef Name="id_employee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK143BF46A3D5D8CD3">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="user_role" Type="Self.user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id_user" />
+            </Principal>
+            <Dependent Role="user_role">
+              <PropertyRef Name="id_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK4722E6AE6304EFCD">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="employee" Type="Self.employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id_user" />
+            </Principal>
+            <Dependent Role="employee">
+              <PropertyRef Name="id_user_obsolete" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK4722E6AEDD345A48">
+          <End Role="employee_general_data" Type="Self.employee_general_data" Multiplicity="0..1" />
+          <End Role="employee" Type="Self.employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employee_general_data">
+              <PropertyRef Name="id_employee_general_data" />
+            </Principal>
+            <Dependent Role="employee">
+              <PropertyRef Name="id_general_data" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK60C91EFA5FA92D81">
+          <End Role="employee" Type="Self.employee" Multiplicity="0..1" />
+          <End Role="employee_reference" Type="Self.employee_reference" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="id_employee" />
+            </Principal>
+            <Dependent Role="employee_reference">
+              <PropertyRef Name="id_employee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FKCAB06BBB5FA92D81">
+          <End Role="employee" Type="Self.employee" Multiplicity="0..1" />
+          <End Role="attendancelog" Type="Self.attendancelog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="employee">
+              <PropertyRef Name="id_employee" />
+            </Principal>
+            <Dependent Role="attendancelog">
+              <PropertyRef Name="id_employee" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TimeAttendanceModelStoreContainer">
+          <EntitySet Name="attendancelog" EntityType="Self.attendancelog" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="cat_device" EntityType="Self.cat_device" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="employee" EntityType="Self.employee" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="employee_general_data" EntityType="Self.employee_general_data" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="employee_reference" EntityType="Self.employee_reference" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="fingerprints" EntityType="Self.fingerprints" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="umeca" store:Type="Tables" />
+          <EntitySet Name="user_role" EntityType="Self.user_role" store:Type="Tables" store:Schema="umeca">
+            <DefiningQuery>SELECT
+`user_role`.`id_user`, 
+`user_role`.`id_role`
+FROM `user_role` AS `user_role`</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK11A0340F5FA92D81" Association="Self.FK11A0340F5FA92D81">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="fingerprints" EntitySet="fingerprints" />
+          </AssociationSet>
+          <AssociationSet Name="FK143BF46A3D5D8CD3" Association="Self.FK143BF46A3D5D8CD3">
+            <End Role="user" EntitySet="user" />
+            <End Role="user_role" EntitySet="user_role" />
+          </AssociationSet>
+          <AssociationSet Name="FK4722E6AE6304EFCD" Association="Self.FK4722E6AE6304EFCD">
+            <End Role="user" EntitySet="user" />
+            <End Role="employee" EntitySet="employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK4722E6AEDD345A48" Association="Self.FK4722E6AEDD345A48">
+            <End Role="employee_general_data" EntitySet="employee_general_data" />
+            <End Role="employee" EntitySet="employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK60C91EFA5FA92D81" Association="Self.FK60C91EFA5FA92D81">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="employee_reference" EntitySet="employee_reference" />
+          </AssociationSet>
+          <AssociationSet Name="FKCAB06BBB5FA92D81" Association="Self.FKCAB06BBB5FA92D81">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="attendancelog" EntitySet="attendancelog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TimeAttendanceModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
+        <EntityType Name="attendancelog">
+          <Key>
+            <PropertyRef Name="id_attendancelog" />
+          </Key>
+          <Property Name="id_attendancelog" Type="Int64" Nullable="false" />
+          <Property Name="eventtime" Type="DateTime" Nullable="false" />
+          <Property Name="workcode" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="employee" Relationship="Self.FKCAB06BBB5FA92D81" FromRole="attendancelog" ToRole="employee" />
+        </EntityType>
+        <EntityType Name="employee">
+          <Key>
+            <PropertyRef Name="id_employee" />
+          </Key>
+          <Property Name="id_employee" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="birth_date" Type="DateTime" />
+          <Property Name="create_date" Type="DateTime" />
+          <Property Name="date_obsolete" Type="DateTime" />
+          <Property Name="gender" Type="Boolean" />
+          <Property Name="is_obsolete" Type="Boolean" />
+          <Property Name="last_name_m" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="last_name_p" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_district" Type="Int64" />
+          <Property Name="id_generic_file" Type="Int64" />
+          <Property Name="id_role" Type="Int64" />
+          <Property Name="id_employee_schedule" Type="Int64" />
+          <NavigationProperty Name="attendancelog" Relationship="Self.FKCAB06BBB5FA92D81" FromRole="employee" ToRole="attendancelog" />
+          <NavigationProperty Name="fingerprints" Relationship="Self.FK11A0340F5FA92D81" FromRole="employee" ToRole="fingerprints" />
+          <NavigationProperty Name="user" Relationship="Self.FK4722E6AE6304EFCD" FromRole="employee" ToRole="user" />
+          <NavigationProperty Name="employee_general_data" Relationship="Self.FK4722E6AEDD345A48" FromRole="employee" ToRole="employee_general_data" />
+          <NavigationProperty Name="employee_reference" Relationship="Self.FK60C91EFA5FA92D81" FromRole="employee" ToRole="employee_reference" />
+        </EntityType>
+        <EntityType Name="employee_general_data">
+          <Key>
+            <PropertyRef Name="id_employee_general_data" />
+          </Key>
+          <Property Name="id_employee_general_data" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="appointment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="certificate" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="date_entry_umeca" Type="DateTime" />
+          <Property Name="date_public_serv" Type="DateTime" />
+          <Property Name="dependents" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="identification_desc" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="isCommissioner" Type="Boolean" />
+          <Property Name="no_employee" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="no_imss" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_address" Type="Int64" />
+          <Property Name="id_document_type" Type="Int64" />
+          <Property Name="id_marital_status" Type="Int64" />
+          <NavigationProperty Name="employee" Relationship="Self.FK4722E6AEDD345A48" FromRole="employee_general_data" ToRole="employee" />
+        </EntityType>
+        <EntityType Name="employee_reference">
+          <Key>
+            <PropertyRef Name="id_employee_reference" />
+          </Key>
+          <Property Name="id_employee_reference" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="age" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="spec_relationship" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="time_ago" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="id_relationship" Type="Int64" />
+          <NavigationProperty Name="employee" Relationship="Self.FK60C91EFA5FA92D81" FromRole="employee_reference" ToRole="employee" />
+        </EntityType>
+        <EntityType Name="fingerprints">
+          <Key>
+            <PropertyRef Name="id_fingerprint" />
+          </Key>
+          <Property Name="id_fingerprint" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="data" Type="String" MaxLength="2048" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="finger" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="employee" Relationship="Self.FK11A0340F5FA92D81" FromRole="fingerprints" ToRole="employee" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id_user" />
+          </Key>
+          <Property Name="id_user" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="enabled" Type="Boolean" Nullable="false" />
+          <Property Name="fullname" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="employee" Relationship="Self.FK4722E6AE6304EFCD" FromRole="user" ToRole="employee" />
+          <NavigationProperty Name="user_role" Relationship="Self.FK143BF46A3D5D8CD3" FromRole="user" ToRole="user_role" />
+        </EntityType>
+        <EntityType Name="user_role">
+          <Key>
+            <PropertyRef Name="id_user" />
+            <PropertyRef Name="id_role" />
+          </Key>
+          <Property Name="id_user" Type="Int64" Nullable="false" />
+          <Property Name="id_role" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="user" Relationship="Self.FK143BF46A3D5D8CD3" FromRole="user_role" ToRole="user" />
+        </EntityType>
+        <Association Name="FKCAB06BBB5FA92D81">
+          <End Role="employee" Type="Self.employee" Multiplicity="0..1" />
+          <End Role="attendancelog" Type="Self.attendancelog" Multiplicity="*" />
+        </Association>
+        <Association Name="FK11A0340F5FA92D81">
+          <End Role="employee" Type="Self.employee" Multiplicity="0..1" />
+          <End Role="fingerprints" Type="Self.fingerprints" Multiplicity="*" />
+        </Association>
+        <Association Name="FK4722E6AE6304EFCD">
+          <End Role="user" Type="Self.user" Multiplicity="0..1" />
+          <End Role="employee" Type="Self.employee" Multiplicity="*" />
+        </Association>
+        <Association Name="FK4722E6AEDD345A48">
+          <End Role="employee_general_data" Type="Self.employee_general_data" Multiplicity="0..1" />
+          <End Role="employee" Type="Self.employee" Multiplicity="*" />
+        </Association>
+        <Association Name="FK60C91EFA5FA92D81">
+          <End Role="employee" Type="Self.employee" Multiplicity="0..1" />
+          <End Role="employee_reference" Type="Self.employee_reference" Multiplicity="*" />
+        </Association>
+        <Association Name="FK143BF46A3D5D8CD3">
+          <End Role="user" Type="Self.user" Multiplicity="1" />
+          <End Role="user_role" Type="Self.user_role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id_user" />
+            </Principal>
+            <Dependent Role="user_role">
+              <PropertyRef Name="id_user" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TimeAttendanceEntities">
+          <EntitySet Name="attendancelog" EntityType="Self.attendancelog" />
+          <EntitySet Name="employee" EntityType="Self.employee" />
+          <EntitySet Name="employee_general_data" EntityType="Self.employee_general_data" />
+          <EntitySet Name="employee_reference" EntityType="Self.employee_reference" />
+          <EntitySet Name="fingerprints" EntityType="Self.fingerprints" />
+          <EntitySet Name="user" EntityType="Self.user" />
+          <EntitySet Name="user_role" EntityType="Self.user_role" />
+          <AssociationSet Name="FKCAB06BBB5FA92D81" Association="Self.FKCAB06BBB5FA92D81">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="attendancelog" EntitySet="attendancelog" />
+          </AssociationSet>
+          <AssociationSet Name="FK11A0340F5FA92D81" Association="Self.FK11A0340F5FA92D81">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="fingerprints" EntitySet="fingerprints" />
+          </AssociationSet>
+          <AssociationSet Name="FK4722E6AE6304EFCD" Association="Self.FK4722E6AE6304EFCD">
+            <End Role="user" EntitySet="user" />
+            <End Role="employee" EntitySet="employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK4722E6AEDD345A48" Association="Self.FK4722E6AEDD345A48">
+            <End Role="employee_general_data" EntitySet="employee_general_data" />
+            <End Role="employee" EntitySet="employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK60C91EFA5FA92D81" Association="Self.FK60C91EFA5FA92D81">
+            <End Role="employee" EntitySet="employee" />
+            <End Role="employee_reference" EntitySet="employee_reference" />
+          </AssociationSet>
+          <AssociationSet Name="FK143BF46A3D5D8CD3" Association="Self.FK143BF46A3D5D8CD3">
+            <End Role="user" EntitySet="user" />
+            <End Role="user_role" EntitySet="user_role" />
+          </AssociationSet>
+          <EntitySet Name="cat_device" EntityType="TimeAttendanceModel.cat_device" />
+        </EntityContainer>
+        <EntityType Name="cat_device">
+          <Key>
+            <PropertyRef Name="id_device" />
+          </Key>
+          <Property Name="id_device" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ip" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="is_obsolete" Type="Boolean" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="port" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="urn:schemas-microsoft-com:windows:storage:mapping:CS">
+        <EntityContainerMapping StorageEntityContainer="TimeAttendanceModelStoreContainer" CdmEntityContainer="TimeAttendanceEntities">
+          <EntitySetMapping Name="attendancelog">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.attendancelog">
+              <MappingFragment StoreEntitySet="attendancelog">
+                <ScalarProperty Name="id_attendancelog" ColumnName="id_attendancelog" />
+                <ScalarProperty Name="eventtime" ColumnName="eventtime" />
+                <ScalarProperty Name="workcode" ColumnName="workcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employee">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.employee">
+              <MappingFragment StoreEntitySet="employee">
+                <ScalarProperty Name="id_employee" ColumnName="id_employee" />
+                <ScalarProperty Name="birth_date" ColumnName="birth_date" />
+                <ScalarProperty Name="create_date" ColumnName="create_date" />
+                <ScalarProperty Name="date_obsolete" ColumnName="date_obsolete" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="is_obsolete" ColumnName="is_obsolete" />
+                <ScalarProperty Name="last_name_m" ColumnName="last_name_m" />
+                <ScalarProperty Name="last_name_p" ColumnName="last_name_p" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id_district" ColumnName="id_district" />
+                <ScalarProperty Name="id_generic_file" ColumnName="id_generic_file" />
+                <ScalarProperty Name="id_role" ColumnName="id_role" />
+                <ScalarProperty Name="id_employee_schedule" ColumnName="id_employee_schedule" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employee_general_data">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.employee_general_data">
+              <MappingFragment StoreEntitySet="employee_general_data">
+                <ScalarProperty Name="id_employee_general_data" ColumnName="id_employee_general_data" />
+                <ScalarProperty Name="appointment" ColumnName="appointment" />
+                <ScalarProperty Name="certificate" ColumnName="certificate" />
+                <ScalarProperty Name="date_entry_umeca" ColumnName="date_entry_umeca" />
+                <ScalarProperty Name="date_public_serv" ColumnName="date_public_serv" />
+                <ScalarProperty Name="dependents" ColumnName="dependents" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="identification_desc" ColumnName="identification_desc" />
+                <ScalarProperty Name="isCommissioner" ColumnName="isCommissioner" />
+                <ScalarProperty Name="no_employee" ColumnName="no_employee" />
+                <ScalarProperty Name="no_imss" ColumnName="no_imss" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="id_address" ColumnName="id_address" />
+                <ScalarProperty Name="id_document_type" ColumnName="id_document_type" />
+                <ScalarProperty Name="id_marital_status" ColumnName="id_marital_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="employee_reference">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.employee_reference">
+              <MappingFragment StoreEntitySet="employee_reference">
+                <ScalarProperty Name="id_employee_reference" ColumnName="id_employee_reference" />
+                <ScalarProperty Name="age" ColumnName="age" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="spec_relationship" ColumnName="spec_relationship" />
+                <ScalarProperty Name="time_ago" ColumnName="time_ago" />
+                <ScalarProperty Name="id_relationship" ColumnName="id_relationship" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="fingerprints">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.fingerprints">
+              <MappingFragment StoreEntitySet="fingerprints">
+                <ScalarProperty Name="id_fingerprint" ColumnName="id_fingerprint" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="finger" ColumnName="finger" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="enabled" ColumnName="enabled" />
+                <ScalarProperty Name="fullname" ColumnName="fullname" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_role">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.user_role">
+              <MappingFragment StoreEntitySet="user_role">
+                <ScalarProperty Name="id_user" ColumnName="id_user" />
+                <ScalarProperty Name="id_role" ColumnName="id_role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FKCAB06BBB5FA92D81" TypeName="TimeAttendanceModel.FKCAB06BBB5FA92D81" StoreEntitySet="attendancelog">
+            <EndProperty Name="employee">
+              <ScalarProperty Name="id_employee" ColumnName="id_employee" />
+            </EndProperty>
+            <EndProperty Name="attendancelog">
+              <ScalarProperty Name="id_attendancelog" ColumnName="id_attendancelog" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="id_employee" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK11A0340F5FA92D81" TypeName="TimeAttendanceModel.FK11A0340F5FA92D81" StoreEntitySet="fingerprints">
+            <EndProperty Name="employee">
+              <ScalarProperty Name="id_employee" ColumnName="id_employee" />
+            </EndProperty>
+            <EndProperty Name="fingerprints">
+              <ScalarProperty Name="id_fingerprint" ColumnName="id_fingerprint" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="id_employee" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK4722E6AE6304EFCD" TypeName="TimeAttendanceModel.FK4722E6AE6304EFCD" StoreEntitySet="employee">
+            <EndProperty Name="user">
+              <ScalarProperty Name="id_user" ColumnName="id_user_obsolete" />
+            </EndProperty>
+            <EndProperty Name="employee">
+              <ScalarProperty Name="id_employee" ColumnName="id_employee" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="id_user_obsolete" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK4722E6AEDD345A48" TypeName="TimeAttendanceModel.FK4722E6AEDD345A48" StoreEntitySet="employee">
+            <EndProperty Name="employee_general_data">
+              <ScalarProperty Name="id_employee_general_data" ColumnName="id_general_data" />
+            </EndProperty>
+            <EndProperty Name="employee">
+              <ScalarProperty Name="id_employee" ColumnName="id_employee" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="id_general_data" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK60C91EFA5FA92D81" TypeName="TimeAttendanceModel.FK60C91EFA5FA92D81" StoreEntitySet="employee_reference">
+            <EndProperty Name="employee">
+              <ScalarProperty Name="id_employee" ColumnName="id_employee" />
+            </EndProperty>
+            <EndProperty Name="employee_reference">
+              <ScalarProperty Name="id_employee_reference" ColumnName="id_employee_reference" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="id_employee" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK143BF46A3D5D8CD3" TypeName="TimeAttendanceModel.FK143BF46A3D5D8CD3" StoreEntitySet="user_role">
+            <EndProperty Name="user">
+              <ScalarProperty Name="id_user" ColumnName="id_user" />
+            </EndProperty>
+            <EndProperty Name="user_role">
+              <ScalarProperty Name="id_user" ColumnName="id_user" />
+              <ScalarProperty Name="id_role" ColumnName="id_role" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="cat_device">
+            <EntityTypeMapping TypeName="TimeAttendanceModel.cat_device">
+              <MappingFragment StoreEntitySet="cat_device">
+                <ScalarProperty Name="port" ColumnName="port" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_obsolete" ColumnName="is_obsolete" />
+                <ScalarProperty Name="ip" ColumnName="ip" />
+                <ScalarProperty Name="id_device" ColumnName="id_device" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2007/06/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
