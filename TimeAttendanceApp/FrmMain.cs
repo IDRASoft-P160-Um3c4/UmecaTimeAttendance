@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using zkemkeeper;
 
@@ -17,11 +16,13 @@ namespace TimeAttendanceApp
         private void BeginWork()
         {
             btnSyncUsers.Enabled = btnEnroll.Enabled = btnAssistence.Enabled = false;
+            Cursor = Cursors.WaitCursor;
         }
 
         private void EndWork()
         {
             btnSyncUsers.Enabled = btnEnroll.Enabled = btnAssistence.Enabled = true;
+            Cursor = Cursors.Default;
         }
 
         public FrmMain()
@@ -34,15 +35,7 @@ namespace TimeAttendanceApp
             try
             {
                 BeginWork();
-                
-
-                //foreach (var device in _devices)
-                //{
-                //    var service = new Service(device);
-
-                //    if (service.IsConnected)
-                //        service.ReadUsers(ref _usersInfo);
-                //}
+                _service.UpdateUsers();
             }
             finally
             {
@@ -55,21 +48,12 @@ namespace TimeAttendanceApp
             try
             {
                 BeginWork();
-
-                //GetDevices();
-
-                //foreach (var device in _devices)
-                //{
-                //    var service = new Service(device);
-
-                //    if (service.IsConnected)
-                //        service.ReadLog(ref _attendanceLogs);
-                //}
+                _service.GetAttendanceLog();
             }
             finally
             {
                 EndWork();
-            }           
+            }
         }
 
         private readonly IDictionary<int, string> _messageError = new Dictionary<int, string>
@@ -87,10 +71,19 @@ namespace TimeAttendanceApp
             {101, " Error in allocating buffer"},
         };
 
-        private void btnUsers_Click(object sender, EventArgs e)
+        private void btnEnroll_Click(object sender, EventArgs e)
         {
-            var frmFingerPrints = new FrmFingerPrints(_service);
-            frmFingerPrints.ShowDialog(this);
+            try
+            {
+                BeginWork();
+
+                var frmFingerPrints = new FrmFingerPrints(_service);
+                frmFingerPrints.ShowDialog(this);
+            }
+            finally
+            {
+                EndWork();
+            }
         }
     }
 
@@ -162,11 +155,11 @@ namespace TimeAttendanceApp
             {
                 EnrollCompleted -= (EnrollEventHandler)del;
             }
-            
+
         }
 
 
-        private readonly CZKEMClass _service = new CZKEMClass();
+        private CZKEMClass _service = new CZKEMClass();
         private const int MachineNumber = 1; //the serial number of the device.After connecting the device ,this value will be changed.
         private List<Device> _devices;
         private readonly string _connectionString;
@@ -206,10 +199,6 @@ namespace TimeAttendanceApp
                 }
             }
         }
-        public Service(Device device) :this()
-        {
-            
-        }
         private bool Connect(Device device)
         {
             IsConnected = _service.Connect_Net(device.Ip, device.Port);
@@ -230,26 +219,184 @@ namespace TimeAttendanceApp
             _connectionString = ConfigurationManager.ConnectionStrings["umeca"].ConnectionString;
         }
 
-        public void ReadLog(ref List<AttendanceLog> attendanceLogs )
+        public void UpdateUsers()
         {
-            attendanceLogs.Clear();
+            GetUsersFromDb();
+            var n = 0;
 
-            _service.EnableDevice(MachineNumber, false);//disable the device
-            if (_service.ReadGeneralLogData(MachineNumber))//read all the attendance records to the memory
+            foreach (var device in Devices)
             {
-                string enrollNumber;
-                int verifyMode, inOutMode, year, month, day, hour, minute, second, workcode = 0;
-                while (_service.SSR_GetGeneralLogData(MachineNumber, out enrollNumber, out verifyMode,
-                           out inOutMode, out year, out month, out day, out hour, out minute, out second, ref workcode))//get records from the memory
+                Connect(device);
+                _service.EnableDevice(MachineNumber, false);
+                if (_service.ClearData(MachineNumber, 5))
+                    _service.RefreshData(MachineNumber);
+
+                foreach (var userInfo in UsersInfo)
                 {
-                    attendanceLogs.Add(new AttendanceLog { EnrollNumber = enrollNumber, Date = new DateTime(year, month, day, hour, minute, second), InOutMode = inOutMode, VerifyMode = verifyMode, WorkCode = workcode });
+                    if (_service.SSR_SetUserInfo(MachineNumber, userInfo.EnrollNumber, userInfo.Name, "", 0, true))
+                    {
+                        if (_service.SSR_DeleteEnrollDataExt(MachineNumber, userInfo.EnrollNumber, 11))
+                        {
+                            _service.RefreshData(MachineNumber);
+                            foreach (var fingerPrint in userInfo.FingerPrints)
+                            {
+                                if (_service.SetUserTmpExStr(MachineNumber, userInfo.EnrollNumber, fingerPrint.Finger, 1,
+                                    fingerPrint.Data))
+                                {
+                                    n++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                _service.EnableDevice(MachineNumber, true);
+                Disconnect();
+            }
+        }
+
+        public enum FingerPrintOperation
+        {
+            Update,
+            Delete
+        }
+
+        public void GetAttendanceLog()
+        {
+            GetUsersFromDb();
+            GetDevices();
+            var attendanceLogs = new List<AttendanceLog>();
+
+            foreach (var device in Devices)
+            {
+                Connect(device);
+
+                _service.EnableDevice(MachineNumber, false);//disable the device
+                if (_service.ReadGeneralLogData(MachineNumber))//read all the attendance records to the memory
+                {
+                    int verifyMode, inOutMode, year, month, day, hour, minute, second, workcode = 0;
+                    string enrollNumber;
+                    while (_service.SSR_GetGeneralLogData(MachineNumber, out enrollNumber, out verifyMode,
+                               out inOutMode, out year, out month, out day, out hour, out minute, out second, ref workcode))//get records from the memory
+                    {
+                        attendanceLogs.Add(new AttendanceLog { EnrollNumber = enrollNumber, Date = new DateTime(year, month, day, hour, minute, second), InOutMode = inOutMode, VerifyMode = verifyMode, WorkCode = inOutMode });
+                    }
+                }
+                else
+                {
+                    ViewError();
+                }
+                _service.EnableDevice(MachineNumber, true);//enable the device
+
+                Disconnect();
+            }
+
+            var enrollNumbers = UsersInfo.Select(u => u.EnrollNumber.ToString()).Distinct().ToList();
+            attendanceLogs = attendanceLogs.Where(a => enrollNumbers.Contains(a.EnrollNumber)).ToList();
+
+
+            if (attendanceLogs.Count > 0)
+                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+                {
+                    db.Open();
+
+                    var command = db.CreateCommand();
+
+                    var strCommand = new StringBuilder("insert ignore into attendancelog(eventtime, workcode, id_employee) values ");
+
+                    foreach (var attendanceLog in attendanceLogs)
+                    {
+                        strCommand.AppendFormat("('{0}', {1}, {2}),", attendanceLog.Date.ToString("s"), attendanceLog.WorkCode, attendanceLog.EnrollNumber);
+                    }
+
+                    command.CommandText = strCommand.ToString(0, strCommand.Length - 1);
+
+                    command.CommandType = CommandType.Text;
+                    var n = command.ExecuteNonQuery();
+                }
+
+
+
+            foreach (var device in Devices)
+            {
+                Connect(device);
+                attendanceLogs.Clear();
+                _service.EnableDevice(MachineNumber, false);//disable the device
+                if (_service.ClearGLog(MachineNumber))
+                {
+                    _service.RefreshData(MachineNumber);//the data in the device should be refreshed
+                }
+                //else
+                //{
+                //    _service.GetLastError(ref idwErrorCode);
+                //}
+                _service.EnableDevice(MachineNumber, true);//enable the device
+                Disconnect();
+            }
+        }
+
+
+        public void UpdateUserFingerPrint(string enrollNumber, int finger, string fingerPrint, FingerPrintOperation operation)
+        {
+            var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
+            var n = 0;
+
+            if (operation == FingerPrintOperation.Update)
+            {
+                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+                {
+                    db.Open();
+
+                    var command = db.CreateCommand();
+                    command.CommandText =
+                        string.Format(
+                            "delete from employee_fingerprint where id_employee = {0} and finger = {1}; insert into employee_fingerprint(id_employee, finger, fingerprint) values({0}, {1}, '{2}');",
+                            enrollNumber, finger, fingerPrint);
+
+                    command.CommandType = CommandType.Text;
+                    n = command.ExecuteNonQuery();
                 }
             }
             else
             {
-                ViewError();
+                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+                {
+                    db.Open();
+
+                    var command = db.CreateCommand();
+                    command.CommandText = string.Format("delete from employee_fingerprint where id_employee = {0} and finger = {1};", enrollNumber, finger);
+
+                    command.CommandType = CommandType.Text;
+                    n = command.ExecuteNonQuery();
+                }
             }
-            _service.EnableDevice(MachineNumber, true);//enable the device
+
+            n = 0;
+            foreach (var device in Devices)
+            {
+                Connect(device);
+
+                _service.RefreshData(MachineNumber);
+                if (operation == FingerPrintOperation.Update)
+                {
+                    if (_service.SSR_SetUserInfo(MachineNumber, enrollNumber, name, "", 0, true))
+                    {
+                        if (_service.SetUserTmpExStr(MachineNumber, enrollNumber, finger, 1, fingerPrint))
+                        {
+                            n++;
+                        }
+                    }
+                }
+                else
+                {
+                    if (_service.SSR_DelUserTmpExt(MachineNumber, enrollNumber, finger))
+                    {
+                        n++;
+                    }
+                }
+
+                Disconnect();
+            }
         }
 
         public void Enroll(long deviceId, string userId, int finger)
@@ -257,9 +404,8 @@ namespace TimeAttendanceApp
             var device = Devices.FirstOrDefault(d => d.Id == deviceId);
             if (device == null)
                 return;
-            
+            _service = new CZKEMClass();
             Connect(device);
-
             _service.CancelOperation();
             _service.SSR_DelUserTmpExt(MachineNumber, userId, finger);//If the specified index of user's templates has existed ,delete it first.(SSR_DelUserTmp is also available sometimes)
 
@@ -267,17 +413,23 @@ namespace TimeAttendanceApp
             {
                 int flag, tmpLength;
                 string tmpData;
-                OnEnrollCompleted(_service.GetUserTmpExStr(MachineNumber, userId, finger, out flag, out tmpData,
+
+                var enroll = _service.GetUserTmpExStr(MachineNumber, userId, finger, out flag, out tmpData,
                     out tmpLength)
                     ? new EnrollEventArgs(true, finger, tmpData)
-                    : new EnrollEventArgs(false, -1, null));
+                    : new EnrollEventArgs(false, -1, null);
+                OnEnrollCompleted(enroll);
+
+
+                if (!enroll.Result)
+                    return;
 
                 var userInfo = UsersInfo.FirstOrDefault(u => u.EnrollNumber == userId);
                 if (userInfo == null)
                     return;
                 var fingerPrint = userInfo.FingerPrints.FirstOrDefault(f => f.Finger == finger);
                 if (fingerPrint == null)
-                    userInfo.FingerPrints.Add(new FingerPrint {Finger = finger, Data = tmpData});
+                    userInfo.FingerPrints.Add(new FingerPrint { Finger = finger, Data = tmpData });
                 else
                     fingerPrint.Data = tmpData;
             };

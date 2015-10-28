@@ -53,7 +53,7 @@ namespace TimeAttendanceApp
                 dataGridViewFP.CurrentCell is DataGridViewCheckBoxCell)
             {
                 var current = dataGridViewFP.CurrentCell;
-                var id = dataGridViewFP.Rows[current.RowIndex].Cells[0].Value.ToString();
+                var enrollName = dataGridViewFP.Rows[current.RowIndex].Cells[0].Value.ToString();
                 var finger = current.ColumnIndex - 2;
                 var value = (bool)dataGridViewFP.Rows[current.RowIndex].Cells[current.ColumnIndex].Value;
 
@@ -66,6 +66,7 @@ namespace TimeAttendanceApp
                         
                     }
                     dataGridViewFP.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                    _service.UpdateUserFingerPrint(enrollName, finger, null, Service.FingerPrintOperation.Delete);
                 }
                 else
                 {
@@ -83,11 +84,13 @@ namespace TimeAttendanceApp
                         if (!args.Result)
                         {
                             dataGridViewFP.CancelEdit();
+                            return;
                         }
                         dataGridViewFP.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                        _service.UpdateUserFingerPrint(enrollName, args.Finger, args.FingerPrint, Service.FingerPrintOperation.Update);
                     };
 
-                    _service.Enroll(deviceId, id, finger);
+                    _service.Enroll(deviceId, enrollName, finger);
                 }
             }
         }

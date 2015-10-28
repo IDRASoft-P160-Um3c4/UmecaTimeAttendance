@@ -31,7 +31,6 @@
             this.btnSyncUsers = new System.Windows.Forms.Button();
             this.btnEnroll = new System.Windows.Forms.Button();
             this.btnAssistence = new System.Windows.Forms.Button();
-            this.btnUsers = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSyncUsers
@@ -52,6 +51,7 @@
             this.btnEnroll.TabIndex = 1;
             this.btnEnroll.Text = "Enrolamiento de Huellas Digitales";
             this.btnEnroll.UseVisualStyleBackColor = true;
+            this.btnEnroll.Click += new System.EventHandler(this.btnEnroll_Click);
             // 
             // btnAssistence
             // 
@@ -63,22 +63,11 @@
             this.btnAssistence.UseVisualStyleBackColor = true;
             this.btnAssistence.Click += new System.EventHandler(this.btnAssistence_Click);
             // 
-            // btnUsers
-            // 
-            this.btnUsers.Location = new System.Drawing.Point(12, 256);
-            this.btnUsers.Name = "btnUsers";
-            this.btnUsers.Size = new System.Drawing.Size(377, 71);
-            this.btnUsers.TabIndex = 3;
-            this.btnUsers.Text = "Enrolamiento de Huellas Digitales";
-            this.btnUsers.UseVisualStyleBackColor = true;
-            this.btnUsers.Click += new System.EventHandler(this.btnUsers_Click);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 333);
-            this.Controls.Add(this.btnUsers);
+            this.ClientSize = new System.Drawing.Size(402, 262);
             this.Controls.Add(this.btnAssistence);
             this.Controls.Add(this.btnEnroll);
             this.Controls.Add(this.btnSyncUsers);
@@ -96,7 +85,6 @@
         private System.Windows.Forms.Button btnSyncUsers;
         private System.Windows.Forms.Button btnEnroll;
         private System.Windows.Forms.Button btnAssistence;
-        private System.Windows.Forms.Button btnUsers;
     }
 }
 
