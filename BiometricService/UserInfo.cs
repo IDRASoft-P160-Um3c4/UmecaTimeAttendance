@@ -10,5 +10,6 @@ namespace BiometricService
         public int Privilege { get; set; }
         public bool Enabled { get; set; }
         public List<FingerPrint> FingerPrints { get; set; }
+
     }
 }
