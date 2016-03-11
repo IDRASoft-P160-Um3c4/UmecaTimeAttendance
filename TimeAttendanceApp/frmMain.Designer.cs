@@ -67,7 +67,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 262);
+            this.ClientSize = new System.Drawing.Size(402, 265);
             this.Controls.Add(this.btnAssistence);
             this.Controls.Add(this.btnEnroll);
             this.Controls.Add(this.btnSyncUsers);
@@ -75,7 +75,7 @@
             this.Name = "FrmMain";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Administración de biométricos";
+            this.Text = "Umeca - CheckClock System";
             this.ResumeLayout(false);
 
         }

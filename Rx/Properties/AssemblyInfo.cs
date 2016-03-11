@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("TimeAttendanceApp")]
+[assembly: AssemblyTitle("Rx")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("IDRA Soft S.A. de C.V.")]
-[assembly: AssemblyProduct("TimeAttendanceApp")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Rx")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1adad4cf-ed34-4563-a9a9-754d61ed3633")]
+[assembly: Guid("69cb967e-efc1-46d7-9f41-b42746a87a47")]
 
 // Version information for an assembly consists of the following four values:
 //

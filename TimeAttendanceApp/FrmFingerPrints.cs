@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using BiometricService;
 
 namespace TimeAttendanceApp
 {
     public partial class FrmFingerPrints : Form
     {
         private readonly BindingSource _bindingSource = new BindingSource();
-        private Service _service;
+        private readonly Service _service;
         public FrmFingerPrints(Service service)
         {
             InitializeComponent();
