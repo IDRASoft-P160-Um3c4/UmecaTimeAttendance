@@ -31,6 +31,7 @@
             this.btnSyncUsers = new System.Windows.Forms.Button();
             this.btnEnroll = new System.Windows.Forms.Button();
             this.btnAssistence = new System.Windows.Forms.Button();
+            this.btnWsAddress = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSyncUsers
@@ -63,11 +64,22 @@
             this.btnAssistence.UseVisualStyleBackColor = true;
             this.btnAssistence.Click += new System.EventHandler(this.btnAssistence_Click);
             // 
+            // btnWsAddress
+            // 
+            this.btnWsAddress.Location = new System.Drawing.Point(13, 256);
+            this.btnWsAddress.Name = "btnWsAddress";
+            this.btnWsAddress.Size = new System.Drawing.Size(377, 71);
+            this.btnWsAddress.TabIndex = 3;
+            this.btnWsAddress.Text = "Dirección del servicio web";
+            this.btnWsAddress.UseVisualStyleBackColor = true;
+            this.btnWsAddress.Click += new System.EventHandler(this.btnWsAddress_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 265);
+            this.ClientSize = new System.Drawing.Size(402, 348);
+            this.Controls.Add(this.btnWsAddress);
             this.Controls.Add(this.btnAssistence);
             this.Controls.Add(this.btnEnroll);
             this.Controls.Add(this.btnSyncUsers);
@@ -85,6 +97,7 @@
         private System.Windows.Forms.Button btnSyncUsers;
         private System.Windows.Forms.Button btnEnroll;
         private System.Windows.Forms.Button btnAssistence;
+        private System.Windows.Forms.Button btnWsAddress;
     }
 }
 

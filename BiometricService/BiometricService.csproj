@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttendanceLog.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="EnrollEventArgs.cs" />
     <Compile Include="EnrollEventHandler.cs" />

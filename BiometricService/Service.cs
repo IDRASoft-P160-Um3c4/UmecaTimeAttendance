@@ -2,9 +2,11 @@
 using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows.Forms;
 using zkemkeeper;
 using BiometricService.BiometricSvc;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 
 namespace BiometricService
@@ -47,8 +49,10 @@ namespace BiometricService
         }
         private void GetDevices()
         {
-            using (var biometricSvc = new BiometricWSPortTypeClient())
+
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
+                if (biometricSvc == null) return;
                 var data = biometricSvc.getDevices();
                 _devices = JsonConvert.DeserializeObject<List<Device>>(data.data);
                 biometricSvc.Close();
@@ -149,13 +153,18 @@ namespace BiometricService
             var enrollNumbers = UsersInfo.Select(u => u.EnrollNumber.ToString()).Distinct().ToList();
             attendanceLogs = attendanceLogs.Where(a => enrollNumbers.Contains(a.EnrollNumber)).ToList();
 
+            
 
             if (attendanceLogs.Count > 0)
-                using (var biometricSvc = new BiometricWSPortTypeClient())
+                using (var biometricSvc = GetNewBiometricWsPortTypeClient())
                 {
+                    if (biometricSvc == null) return;
                     biometricSvc.updateAttendanceLogs(JsonConvert.SerializeObject(attendanceLogs));
                     biometricSvc.Close();
                 }
+
+
+               
 
             foreach (var device in Devices)
             {
@@ -180,9 +189,9 @@ namespace BiometricService
             var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
             var n = 0;
 
-
-            using (var biometricSvc = new BiometricWSPortTypeClient())
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
+                if (biometricSvc == null) return;
                 biometricSvc.updateUserFingerPrint(enrollNumber, finger, fingerPrint, (int)operation);
                 biometricSvc.Close();
             }
@@ -347,15 +356,47 @@ namespace BiometricService
 
         public void GetUsersFromDb()
         {
-
-            using (var biometricSvc = new BiometricWSPortTypeClient())
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
+                if (biometricSvc == null) return;
                 var data = biometricSvc.getUsersFromDB();
                 UsersInfo = JsonConvert.DeserializeObject<List<UserInfo>>(data.data);
-                biometricSvc.Close();
             }
-
-
         }
+
+        public string GetRemoteAddressWs()
+        {
+            using (var registry = Registry.LocalMachine)
+            {
+                var subkey = registry.OpenSubKey(Constants.WS_REGISTRY, false);
+                var address = (string)subkey?.GetValue(Constants.WS_SUBKEY) ?? "";
+                return address;
+            }
+        }
+
+        public void SetRemoteAddressWs(string addresss)
+        {
+            using (var registry = Registry.LocalMachine)
+            {
+                var subKey = registry.OpenSubKey(Constants.WS_REGISTRY, true) ??
+                             registry.CreateSubKey(Constants.WS_REGISTRY);
+                subKey?.SetValue(Constants.WS_SUBKEY, addresss, RegistryValueKind.String);
+            }
+        }
+
+
+        private BiometricWSPortTypeClient GetNewBiometricWsPortTypeClient()
+        {
+            var address = GetRemoteAddressWs();
+            if (address == null || address.Equals(""))
+            {
+                MessageBox.Show("Es necesario actualizar la dirección del servicio web", "Error");
+                return null;
+            }
+            var binding = new BasicHttpBinding();
+            var remoteAaddress = new EndpointAddress(address);
+            return new BiometricWSPortTypeClient(binding, remoteAaddress);
+        }
+
     }
 }
