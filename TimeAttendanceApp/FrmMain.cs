@@ -81,5 +81,21 @@ namespace TimeAttendanceApp
                 EndWork();
             }
         }
+
+
+        private void btnWsAddress_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BeginWork();
+
+                var frmWsAddress = new FrmWsAddress(_service);
+                frmWsAddress.ShowDialog(this);
+            }
+            finally
+            {
+                EndWork();
+            }
+        }
     }
 }

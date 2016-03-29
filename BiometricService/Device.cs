@@ -2,9 +2,9 @@
 {
     public class Device
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Ip { get; set; }
-        public int Port { get; set; }
+        public long id { get; set; }
+        public string name { get; set; }
+        public string ip { get; set; }
+        public int port { get; set; }
     }
 }

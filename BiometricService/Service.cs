@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Configuration;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
+using System.ServiceModel;
 using System.Windows.Forms;
 using zkemkeeper;
+using BiometricService.BiometricSvc;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace BiometricService
 {
     public class Service
     {
         public event EnrollEventHandler EnrollCompleted;
+
         protected virtual void OnEnrollCompleted(EnrollEventArgs e)
         {
             var handler = EnrollCompleted;
             handler?.Invoke(this, e);
         }
+
         public void ClearEvents()
         {
             if (EnrollCompleted == null) return;
@@ -26,13 +30,15 @@ namespace BiometricService
             }
 
         }
+
+
         private CZKEMClass _service = new CZKEMClass();
         private const int MachineNumber = 1; //the serial number of the device.After connecting the device ,this value will be changed.
         private List<Device> _devices;
         private readonly string _connectionString;
         public bool IsConnected { get; set; }
         public List<UserInfo> UsersInfo { get; private set; } = new List<UserInfo>();
-        public UserInfo ImputedInfo { get; private set; } = new UserInfo();
+
         public List<Device> Devices
         {
             get
@@ -43,32 +49,18 @@ namespace BiometricService
         }
         private void GetDevices()
         {
-            using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
-                db.Open();
-
-                var command = db.CreateCommand();
-                command.CommandText = "select * from cat_device where is_obsolete = 0";
-
-                command.CommandType = CommandType.Text;
-                var reader = command.ExecuteReader();
-                _devices = new List<Device>();
-
-                while (reader.Read())
-                {
-                    _devices.Add(new Device
-                    {
-                        Id = reader.GetInt64("id_device"),
-                        Name = reader.GetString("name"),
-                        Ip = reader.GetString("Ip"),
-                        Port = reader.GetInt32("Port")
-                    });
-                }
+                if (biometricSvc == null) return;
+                var data = biometricSvc.getDevices();
+                _devices = JsonConvert.DeserializeObject<List<Device>>(data.data);
+                biometricSvc.Close();
             }
         }
         private bool Connect(Device device)
         {
-            IsConnected = _service.Connect_Net(device.Ip, device.Port);
+            IsConnected = _service.Connect_Net(device.ip, device.port);
 
             if (!IsConnected)
             {
@@ -85,6 +77,7 @@ namespace BiometricService
         {
             _connectionString = ConfigurationManager.ConnectionStrings["umeca"].ConnectionString;
         }
+
         public void UpdateUsers()
         {
             GetUsersFromDb();
@@ -120,11 +113,13 @@ namespace BiometricService
                 Disconnect();
             }
         }
+
         public enum FingerPrintOperation
         {
             Update,
             Delete
         }
+
         public void GetAttendanceLog()
         {
             GetUsersFromDb();
@@ -158,28 +153,18 @@ namespace BiometricService
             var enrollNumbers = UsersInfo.Select(u => u.EnrollNumber.ToString()).Distinct().ToList();
             attendanceLogs = attendanceLogs.Where(a => enrollNumbers.Contains(a.EnrollNumber)).ToList();
 
+            
 
             if (attendanceLogs.Count > 0)
-                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+                using (var biometricSvc = GetNewBiometricWsPortTypeClient())
                 {
-                    db.Open();
-
-                    var command = db.CreateCommand();
-
-                    var strCommand = new StringBuilder("insert ignore into attendancelog(eventtime, workcode, id_employee) values ");
-
-                    foreach (var attendanceLog in attendanceLogs)
-                    {
-                        strCommand.AppendFormat("('{0}', {1}, {2}),", attendanceLog.Date.ToString("s"), attendanceLog.WorkCode, attendanceLog.EnrollNumber);
-                    }
-
-                    command.CommandText = strCommand.ToString(0, strCommand.Length - 1);
-
-                    command.CommandType = CommandType.Text;
-                    var n = command.ExecuteNonQuery();
+                    if (biometricSvc == null) return;
+                    biometricSvc.updateAttendanceLogs(JsonConvert.SerializeObject(attendanceLogs));
+                    biometricSvc.Close();
                 }
 
 
+               
 
             foreach (var device in Devices)
             {
@@ -198,40 +183,19 @@ namespace BiometricService
                 Disconnect();
             }
         }
+
         public void UpdateUserFingerPrint(string enrollNumber, int finger, string fingerPrint, FingerPrintOperation operation)
         {
             var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
             var n = 0;
 
-            if (operation == FingerPrintOperation.Update)
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
-                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
-                {
-                    db.Open();
-
-                    var command = db.CreateCommand();
-                    command.CommandText =
-                        string.Format(
-                            "delete from employee_fingerprint where id_employee = {0} and finger = {1}; insert into employee_fingerprint(id_employee, finger, fingerprint) values({0}, {1}, '{2}');",
-                            enrollNumber, finger, fingerPrint);
-
-                    command.CommandType = CommandType.Text;
-                    n = command.ExecuteNonQuery();
-                }
+                if (biometricSvc == null) return;
+                biometricSvc.updateUserFingerPrint(enrollNumber, finger, fingerPrint, (int)operation);
+                biometricSvc.Close();
             }
-            else
-            {
-                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
-                {
-                    db.Open();
 
-                    var command = db.CreateCommand();
-                    command.CommandText = string.Format("delete from employee_fingerprint where id_employee = {0} and finger = {1};", enrollNumber, finger);
-
-                    command.CommandType = CommandType.Text;
-                    n = command.ExecuteNonQuery();
-                }
-            }
 
             n = 0;
             foreach (var device in Devices)
@@ -261,72 +225,9 @@ namespace BiometricService
             }
         }
 
-        public void UpdateImputedFingerPrint(long user, string enrollNumber, int finger, string fingerPrint, FingerPrintOperation operation, long deviceId)
-        {
-            var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
-            var n = 0;
-
-            if (operation == FingerPrintOperation.Update)
-            {
-                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
-                {
-                    db.Open();
-
-                    var command = db.CreateCommand();
-                    command.CommandText =
-                        string.Format(
-                            "delete from imputed_fingerprint where id_imputed = {0} and finger = {1}; insert into imputed_fingerprint(id_imputed, finger, data, id_user, timestamp) values({0}, {1}, '{2}', {3}, current_timestamp());",
-                            enrollNumber, finger, fingerPrint, user);
-
-                    command.CommandType = CommandType.Text;
-
-                    n = command.ExecuteNonQuery();
-                }
-            }
-            else
-            {
-                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
-                {
-                    db.Open();
-
-                    var command = db.CreateCommand();
-                    command.CommandText = string.Format("delete from imputed_fingerprint where id_imputed = {0} and finger = {1};", enrollNumber, finger);
-
-                    command.CommandType = CommandType.Text;
-                    n = command.ExecuteNonQuery();
-                }
-            }
-
-            n = 0;
-            var device = Devices.FirstOrDefault(d => d.Id == deviceId);
-
-            Connect(device);
-
-            _service.RefreshData(MachineNumber);
-            if (operation == FingerPrintOperation.Update)
-            {
-                if (_service.SSR_SetUserInfo(MachineNumber, enrollNumber, name, "", 0, true))
-                {
-                    if (_service.SetUserTmpExStr(MachineNumber, enrollNumber, finger, 1, fingerPrint))
-                    {
-                        n++;
-                    }
-                }
-            }
-            else
-            {
-                if (_service.SSR_DelUserTmpExt(MachineNumber, enrollNumber, finger))
-                {
-                    n++;
-                }
-            }
-
-            Disconnect();
-
-        }
         public void Enroll(long deviceId, string userId, int finger)
         {
-            var device = Devices.FirstOrDefault(d => d.Id == deviceId);
+            var device = Devices.FirstOrDefault(d => d.id == deviceId);
             if (device == null)
                 return;
             _service = new CZKEMClass();
@@ -419,6 +320,7 @@ namespace BiometricService
 
             Disconnect();
         }
+
         public void ReadUsers()
         {
             GetDevices();
@@ -428,6 +330,7 @@ namespace BiometricService
                 ReadUsersInternal(device);
             }
         }
+
         private void ViewError()
         {
             var idwErrorCode = 0;
@@ -453,97 +356,47 @@ namespace BiometricService
 
         public void GetUsersFromDb()
         {
-            using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
-                db.Open();
-
-                var command = db.CreateCommand();
-                command.CommandText = "select id_employee, concat(name, ' ', last_name_p, ' ', last_name_m) name from employee where is_obsolete = 0";
-
-                command.CommandType = CommandType.Text;
-                var reader = command.ExecuteReader();
-                UsersInfo = new List<UserInfo>();
-
-                while (reader.Read())
-                {
-                    UsersInfo.Add(new UserInfo
-                    {
-                        EnrollNumber = reader.GetInt64("id_employee").ToString(),
-                        Name = reader.GetString("name")
-                    });
-                }
-
-                reader.Close();
-
-                foreach (var userInfo in UsersInfo)
-                {
-                    var commandfp = db.CreateCommand();
-                    commandfp.CommandText = string.Format("select id_employee_fingerprint, id_employee, finger, fingerprint from employee_fingerprint where id_employee = {0}", userInfo.EnrollNumber);
-                    commandfp.CommandType = CommandType.Text;
-                    var readerfp = commandfp.ExecuteReader();
-                    var fingerPrints = new List<FingerPrint>();
-
-                    while (readerfp.Read())
-                    {
-                        fingerPrints.Add(new FingerPrint
-                        {
-                            Finger = readerfp.GetInt32("finger"),
-                            Data = readerfp.GetString("fingerprint")
-                        });
-                    }
-
-                    userInfo.FingerPrints = fingerPrints;
-
-                    readerfp.Close();
-                }
+                if (biometricSvc == null) return;
+                var data = biometricSvc.getUsersFromDB();
+                UsersInfo = JsonConvert.DeserializeObject<List<UserInfo>>(data.data);
             }
         }
 
-        public void GetImputedFromDb(long idImputed)
+        public string GetRemoteAddressWs()
         {
-            using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+            using (var registry = Registry.LocalMachine)
             {
-                db.Open();
-
-                var command = db.CreateCommand();
-                command.CommandText = string.Format("select id_imputed, concat(name, ' ', lastname_p, ' ', lastname_m) name from imputed where id_imputed = {0}", idImputed);
-
-                command.CommandType = CommandType.Text;
-                var reader = command.ExecuteReader();
-
-
-                while (reader.Read())
-                {
-                    ImputedInfo = new UserInfo
-                    {
-                        EnrollNumber = reader.GetInt64("id_imputed").ToString(),
-                        Name = reader.GetString("name")
-                    };
-                }
-
-                reader.Close();
-
-
-                var commandfp = db.CreateCommand();
-                commandfp.CommandText = string.Format("select id_fingerprint, id_imputed, finger, data from imputed_fingerprint where id_imputed = {0}", ImputedInfo.EnrollNumber);
-                commandfp.CommandType = CommandType.Text;
-                var readerfp = commandfp.ExecuteReader();
-                var fingerPrints = new List<FingerPrint>();
-
-                while (readerfp.Read())
-                {
-                    fingerPrints.Add(new FingerPrint
-                    {
-                        Finger = readerfp.GetInt32("finger"),
-                        Data = readerfp.GetString("data")
-                    });
-                }
-
-                ImputedInfo.FingerPrints = fingerPrints;
-
-                readerfp.Close();
-
+                var subkey = registry.OpenSubKey(Constants.WS_REGISTRY, false);
+                var address = (string)subkey?.GetValue(Constants.WS_SUBKEY) ?? "";
+                return address;
             }
         }
+
+        public void SetRemoteAddressWs(string addresss)
+        {
+            using (var registry = Registry.LocalMachine)
+            {
+                var subKey = registry.OpenSubKey(Constants.WS_REGISTRY, true) ??
+                             registry.CreateSubKey(Constants.WS_REGISTRY);
+                subKey?.SetValue(Constants.WS_SUBKEY, addresss, RegistryValueKind.String);
+            }
+        }
+
+
+        private BiometricWSPortTypeClient GetNewBiometricWsPortTypeClient()
+        {
+            var address = GetRemoteAddressWs();
+            if (address == null || address.Equals(""))
+            {
+                MessageBox.Show("Es necesario actualizar la dirección del servicio web", "Error");
+                return null;
+            }
+            var binding = new BasicHttpBinding();
+            var remoteAaddress = new EndpointAddress(address);
+            return new BiometricWSPortTypeClient(binding, remoteAaddress);
+        }
+
     }
 }
