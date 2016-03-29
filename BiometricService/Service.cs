@@ -12,13 +12,11 @@ namespace BiometricService
     public class Service
     {
         public event EnrollEventHandler EnrollCompleted;
-
         protected virtual void OnEnrollCompleted(EnrollEventArgs e)
         {
             var handler = EnrollCompleted;
             handler?.Invoke(this, e);
         }
-
         public void ClearEvents()
         {
             if (EnrollCompleted == null) return;
@@ -28,15 +26,13 @@ namespace BiometricService
             }
 
         }
-
-
         private CZKEMClass _service = new CZKEMClass();
         private const int MachineNumber = 1; //the serial number of the device.After connecting the device ,this value will be changed.
         private List<Device> _devices;
         private readonly string _connectionString;
         public bool IsConnected { get; set; }
         public List<UserInfo> UsersInfo { get; private set; } = new List<UserInfo>();
-
+        public UserInfo ImputedInfo { get; private set; } = new UserInfo();
         public List<Device> Devices
         {
             get
@@ -89,7 +85,6 @@ namespace BiometricService
         {
             _connectionString = ConfigurationManager.ConnectionStrings["umeca"].ConnectionString;
         }
-
         public void UpdateUsers()
         {
             GetUsersFromDb();
@@ -125,13 +120,11 @@ namespace BiometricService
                 Disconnect();
             }
         }
-
         public enum FingerPrintOperation
         {
             Update,
             Delete
         }
-
         public void GetAttendanceLog()
         {
             GetUsersFromDb();
@@ -205,8 +198,6 @@ namespace BiometricService
                 Disconnect();
             }
         }
-
-
         public void UpdateUserFingerPrint(string enrollNumber, int finger, string fingerPrint, FingerPrintOperation operation)
         {
             var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
@@ -270,6 +261,69 @@ namespace BiometricService
             }
         }
 
+        public void UpdateImputedFingerPrint(long user, string enrollNumber, int finger, string fingerPrint, FingerPrintOperation operation, long deviceId)
+        {
+            var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
+            var n = 0;
+
+            if (operation == FingerPrintOperation.Update)
+            {
+                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+                {
+                    db.Open();
+
+                    var command = db.CreateCommand();
+                    command.CommandText =
+                        string.Format(
+                            "delete from imputed_fingerprint where id_imputed = {0} and finger = {1}; insert into imputed_fingerprint(id_imputed, finger, data, id_user, timestamp) values({0}, {1}, '{2}', {3}, current_timestamp());",
+                            enrollNumber, finger, fingerPrint, user);
+
+                    command.CommandType = CommandType.Text;
+
+                    n = command.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+                {
+                    db.Open();
+
+                    var command = db.CreateCommand();
+                    command.CommandText = string.Format("delete from imputed_fingerprint where id_imputed = {0} and finger = {1};", enrollNumber, finger);
+
+                    command.CommandType = CommandType.Text;
+                    n = command.ExecuteNonQuery();
+                }
+            }
+
+            n = 0;
+            var device = Devices.FirstOrDefault(d => d.Id == deviceId);
+
+            Connect(device);
+
+            _service.RefreshData(MachineNumber);
+            if (operation == FingerPrintOperation.Update)
+            {
+                if (_service.SSR_SetUserInfo(MachineNumber, enrollNumber, name, "", 0, true))
+                {
+                    if (_service.SetUserTmpExStr(MachineNumber, enrollNumber, finger, 1, fingerPrint))
+                    {
+                        n++;
+                    }
+                }
+            }
+            else
+            {
+                if (_service.SSR_DelUserTmpExt(MachineNumber, enrollNumber, finger))
+                {
+                    n++;
+                }
+            }
+
+            Disconnect();
+
+        }
         public void Enroll(long deviceId, string userId, int finger)
         {
             var device = Devices.FirstOrDefault(d => d.Id == deviceId);
@@ -365,7 +419,6 @@ namespace BiometricService
 
             Disconnect();
         }
-
         public void ReadUsers()
         {
             GetDevices();
@@ -375,7 +428,6 @@ namespace BiometricService
                 ReadUsersInternal(device);
             }
         }
-
         private void ViewError()
         {
             var idwErrorCode = 0;
@@ -444,6 +496,53 @@ namespace BiometricService
 
                     readerfp.Close();
                 }
+            }
+        }
+
+        public void GetImputedFromDb(long idImputed)
+        {
+            using (var db = new MySql.Data.MySqlClient.MySqlConnection(_connectionString))
+            {
+                db.Open();
+
+                var command = db.CreateCommand();
+                command.CommandText = string.Format("select id_imputed, concat(name, ' ', lastname_p, ' ', lastname_m) name from imputed where id_imputed = {0}", idImputed);
+
+                command.CommandType = CommandType.Text;
+                var reader = command.ExecuteReader();
+
+
+                while (reader.Read())
+                {
+                    ImputedInfo = new UserInfo
+                    {
+                        EnrollNumber = reader.GetInt64("id_imputed").ToString(),
+                        Name = reader.GetString("name")
+                    };
+                }
+
+                reader.Close();
+
+
+                var commandfp = db.CreateCommand();
+                commandfp.CommandText = string.Format("select id_fingerprint, id_imputed, finger, data from imputed_fingerprint where id_imputed = {0}", ImputedInfo.EnrollNumber);
+                commandfp.CommandType = CommandType.Text;
+                var readerfp = commandfp.ExecuteReader();
+                var fingerPrints = new List<FingerPrint>();
+
+                while (readerfp.Read())
+                {
+                    fingerPrints.Add(new FingerPrint
+                    {
+                        Finger = readerfp.GetInt32("finger"),
+                        Data = readerfp.GetString("data")
+                    });
+                }
+
+                ImputedInfo.FingerPrints = fingerPrints;
+
+                readerfp.Close();
+
             }
         }
     }
