@@ -118,6 +118,4 @@ namespace TimeAttendanceApp
             }
         }
     }
-
-    
 }
