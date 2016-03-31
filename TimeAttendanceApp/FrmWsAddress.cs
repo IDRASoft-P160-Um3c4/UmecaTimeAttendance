@@ -26,7 +26,7 @@ namespace TimeAttendanceApp
             var addresss = txtBoxAddress.Text;
             if (addresss == null || addresss.Equals(""))
             {
-                MessageBox.Show("Es necesario escribir la dirección del servicio web", "Error");
+                MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
                 return;
             }
             _service.SetRemoteAddressWs(addresss);

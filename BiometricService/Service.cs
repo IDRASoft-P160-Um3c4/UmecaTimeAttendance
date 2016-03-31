@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Windows.Forms;
@@ -366,31 +367,26 @@ namespace BiometricService
 
         public string GetRemoteAddressWs()
         {
-            using (var registry = Registry.LocalMachine)
-            {
-                var subkey = registry.OpenSubKey(Constants.WS_REGISTRY, false);
-                var address = (string)subkey?.GetValue(Constants.WS_SUBKEY) ?? "";
-                return address;
-            }
+            var address = File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Constants.WS_URL_FILE) ?
+                File.ReadAllText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Constants.WS_URL_FILE) : "";
+            return address;
+
+            
         }
 
         public void SetRemoteAddressWs(string addresss)
         {
-            using (var registry = Registry.LocalMachine)
-            {
-                var subKey = registry.OpenSubKey(Constants.WS_REGISTRY, true) ??
-                             registry.CreateSubKey(Constants.WS_REGISTRY);
-                subKey?.SetValue(Constants.WS_SUBKEY, addresss, RegistryValueKind.String);
-            }
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Constants.WS_URL_FILE;
+            File.WriteAllText(path, addresss);  
         }
 
 
         private BiometricWSPortTypeClient GetNewBiometricWsPortTypeClient()
         {
             var address = GetRemoteAddressWs();
-            if (address == null || address.Equals(""))
+            if (string.IsNullOrEmpty(address))
             {
-                MessageBox.Show("Es necesario actualizar la dirección del servicio web", "Error");
+                MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
                 return null;
             }
             var binding = new BasicHttpBinding();
