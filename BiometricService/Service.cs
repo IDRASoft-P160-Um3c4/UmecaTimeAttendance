@@ -2,10 +2,13 @@
 using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.Permissions;
+using System.Security.Principal;
 using System.ServiceModel;
 using System.Windows.Forms;
+using BiometricService.BiometricWs;
 using zkemkeeper;
-using BiometricService.BiometricSvc;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
@@ -28,9 +31,7 @@ namespace BiometricService
             {
                 EnrollCompleted -= (EnrollEventHandler)del;
             }
-
         }
-
 
         private CZKEMClass _service = new CZKEMClass();
         private const int MachineNumber = 1; //the serial number of the device.After connecting the device ,this value will be changed.
@@ -38,6 +39,7 @@ namespace BiometricService
         private readonly string _connectionString;
         public bool IsConnected { get; set; }
         public List<UserInfo> UsersInfo { get; private set; } = new List<UserInfo>();
+        public UserInfo ImputedInfo { get; private set; } = new UserInfo();
 
         public List<Device> Devices
         {
@@ -272,6 +274,59 @@ namespace BiometricService
                 MessageBox.Show("Operation failed,ErrorCode=" + idwErrorCode, "Error");
             }
         }
+
+        public void GetImputedFromDb(long idImputed)
+        {
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
+            {
+                if (biometricSvc == null) return;
+                var x = biometricSvc.getImputed(idImputed);
+                biometricSvc.Close();
+
+                ImputedInfo = JsonConvert.DeserializeObject<UserInfo>(x.data);
+            }
+        }
+
+        public void UpdateImputedFingerPrint(long user, string enrollNumber, int finger, string fingerPrint,
+            FingerPrintOperation operation, long deviceId)
+        {
+            var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
+            var n = 0;
+
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
+            {
+                if (biometricSvc == null) return;
+                biometricSvc.updateImputedFingerPrint(enrollNumber, finger, fingerPrint, (int)operation);
+                biometricSvc.Close();
+            }
+
+            n = 0;
+            var device = Devices.FirstOrDefault(d => d.id == deviceId);
+
+            Connect(device);
+
+            _service.RefreshData(MachineNumber);
+            if (operation == FingerPrintOperation.Update)
+            {
+                if (_service.SSR_SetUserInfo(MachineNumber, enrollNumber, name, "", 0, true))
+                {
+                    if (_service.SetUserTmpExStr(MachineNumber, enrollNumber, finger, 1, fingerPrint))
+                    {
+                        n++;
+                    }
+                }
+            }
+            else
+            {
+                if (_service.SSR_DelUserTmpExt(MachineNumber, enrollNumber, finger))
+                {
+                    n++;
+                }
+            }
+
+            Disconnect();
+        }
+
         private void ReadUsersInternal(Device device)
         {
             if (!Connect(device)) return;
@@ -397,6 +452,5 @@ namespace BiometricService
             var remoteAaddress = new EndpointAddress(address);
             return new BiometricWSPortTypeClient(binding, remoteAaddress);
         }
-
     }
 }

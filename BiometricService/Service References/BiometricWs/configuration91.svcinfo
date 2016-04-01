@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="7OKAcw3QbDNvugvnYZp8dl4KsME=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="AmfjFZI/QGdPk1jeSUClf7CnfXM=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="BiometricWSSoap11Binding">
       <properties>
@@ -263,10 +263,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="BiometricWSHttpSoap11Endpoint" contract="BiometricSvc.BiometricWSPortType" bindingType="basicHttpBinding" address="http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap11Endpoint/" bindingConfiguration="BiometricWSSoap11Binding">
+    <endpoint name="BiometricWSHttpSoap11Endpoint" contract="BiometricWs.BiometricWSPortType" bindingType="basicHttpBinding" address="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap11Endpoint/" bindingConfiguration="BiometricWSSoap11Binding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap11Endpoint/</serializedValue>
+          <serializedValue>http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap11Endpoint/</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -278,7 +278,7 @@
           <serializedValue>BiometricWSSoap11Binding</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BiometricSvc.BiometricWSPortType</serializedValue>
+          <serializedValue>BiometricWs.BiometricWSPortType</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -348,10 +348,10 @@
         </property>
       </properties>
     </endpoint>
-    <endpoint name="BiometricWSHttpSoap12Endpoint" contract="BiometricSvc.BiometricWSPortType" bindingType="customBinding" address="http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap12Endpoint/" bindingConfiguration="BiometricWSSoap12Binding">
+    <endpoint name="BiometricWSHttpSoap12Endpoint" contract="BiometricWs.BiometricWSPortType" bindingType="customBinding" address="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap12Endpoint/" bindingConfiguration="BiometricWSSoap12Binding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap12Endpoint/</serializedValue>
+          <serializedValue>http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap12Endpoint/</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -363,7 +363,7 @@
           <serializedValue>BiometricWSSoap12Binding</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>BiometricSvc.BiometricWSPortType</serializedValue>
+          <serializedValue>BiometricWs.BiometricWSPortType</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>

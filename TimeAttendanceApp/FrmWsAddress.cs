@@ -6,8 +6,6 @@ namespace TimeAttendanceApp
 {
     public partial class FrmWsAddress : Form
     {
-
-
         private readonly Service _service;
 
         public FrmWsAddress(Service service)
@@ -26,10 +24,15 @@ namespace TimeAttendanceApp
             var addresss = txtBoxAddress.Text;
             if (addresss == null || addresss.Equals(""))
             {
-                MessageBox.Show("Es necesario escribir la dirección del servicio web", "Error");
+                MessageBox.Show(@"Es necesario introducir la dirección web (URL) del servicio web", @"Valor requerido", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return;
             }
             _service.SetRemoteAddressWs(addresss);
+            Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
             Close();
         }
     }

@@ -8,34 +8,46 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BiometricService.BiometricSvc {
+namespace BiometricService.BiometricWs {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://ws.umeca.com", ConfigurationName="BiometricSvc.BiometricWSPortType")]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://ws.umeca.com", ConfigurationName="BiometricWs.BiometricWSPortType")]
     public interface BiometricWSPortType {
         
         // CODEGEN: Generating message contract since the operation getUsersFromDB is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="urn:getUsersFromDB", ReplyAction="urn:getUsersFromDBResponse")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BiometricService.BiometricSvc.getUsersFromDBResponse getUsersFromDB(BiometricService.BiometricSvc.getUsersFromDBRequest request);
+        BiometricService.BiometricWs.getUsersFromDBResponse getUsersFromDB(BiometricService.BiometricWs.getUsersFromDBRequest request);
+        
+        // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="urn:updateImputedFingerPrint", ReplyAction="urn:updateImputedFingerPrintResponse")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        BiometricService.BiometricWs.updateImputedFingerPrintResponse updateImputedFingerPrint(BiometricService.BiometricWs.updateImputedFingerPrintRequest request);
         
         // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="urn:updateAttendanceLogs", ReplyAction="urn:updateAttendanceLogsResponse")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        BiometricService.BiometricSvc.updateAttendanceLogsResponse updateAttendanceLogs(BiometricService.BiometricSvc.updateAttendanceLogsRequest request);
+        BiometricService.BiometricWs.updateAttendanceLogsResponse updateAttendanceLogs(BiometricService.BiometricWs.updateAttendanceLogsRequest request);
         
         // CODEGEN: Generating message contract since the operation getDevices is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="urn:getDevices", ReplyAction="urn:getDevicesResponse")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BiometricService.BiometricSvc.getDevicesResponse getDevices(BiometricService.BiometricSvc.getDevicesRequest request);
+        BiometricService.BiometricWs.getDevicesResponse getDevices(BiometricService.BiometricWs.getDevicesRequest request);
         
         // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="urn:updateUserFingerPrint", ReplyAction="urn:updateUserFingerPrintResponse")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
-        BiometricService.BiometricSvc.updateUserFingerPrintResponse updateUserFingerPrint(BiometricService.BiometricSvc.updateUserFingerPrintRequest request);
+        BiometricService.BiometricWs.updateUserFingerPrintResponse updateUserFingerPrint(BiometricService.BiometricWs.updateUserFingerPrintRequest request);
+        
+        // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="urn:getImputed", ReplyAction="urn:getImputedResponse")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        BiometricService.BiometricWs.getImputedResponse getImputed(BiometricService.BiometricWs.getImputedRequest request);
     }
     
     /// <remarks/>
@@ -172,12 +184,61 @@ namespace BiometricService.BiometricSvc {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public BiometricService.BiometricSvc.ResponseMessage @return;
+        public BiometricService.BiometricWs.ResponseMessage @return;
         
         public getUsersFromDBResponse() {
         }
         
-        public getUsersFromDBResponse(BiometricService.BiometricSvc.ResponseMessage @return) {
+        public getUsersFromDBResponse(BiometricService.BiometricWs.ResponseMessage @return) {
+            this.@return = @return;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="updateImputedFingerPrint", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
+    public partial class updateImputedFingerPrintRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string enrollNumber;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=1)]
+        public int finger;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=2)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string fingerPrint;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=3)]
+        public int operation;
+        
+        public updateImputedFingerPrintRequest() {
+        }
+        
+        public updateImputedFingerPrintRequest(string enrollNumber, int finger, string fingerPrint, int operation) {
+            this.enrollNumber = enrollNumber;
+            this.finger = finger;
+            this.fingerPrint = fingerPrint;
+            this.operation = operation;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="updateImputedFingerPrintResponse", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
+    public partial class updateImputedFingerPrintResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public BiometricService.BiometricWs.ResponseMessage @return;
+        
+        public updateImputedFingerPrintResponse() {
+        }
+        
+        public updateImputedFingerPrintResponse(BiometricService.BiometricWs.ResponseMessage @return) {
             this.@return = @return;
         }
     }
@@ -208,12 +269,12 @@ namespace BiometricService.BiometricSvc {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public BiometricService.BiometricSvc.ResponseMessage @return;
+        public BiometricService.BiometricWs.ResponseMessage @return;
         
         public updateAttendanceLogsResponse() {
         }
         
-        public updateAttendanceLogsResponse(BiometricService.BiometricSvc.ResponseMessage @return) {
+        public updateAttendanceLogsResponse(BiometricService.BiometricWs.ResponseMessage @return) {
             this.@return = @return;
         }
     }
@@ -236,12 +297,12 @@ namespace BiometricService.BiometricSvc {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public BiometricService.BiometricSvc.ResponseMessage @return;
+        public BiometricService.BiometricWs.ResponseMessage @return;
         
         public getDevicesResponse() {
         }
         
-        public getDevicesResponse(BiometricService.BiometricSvc.ResponseMessage @return) {
+        public getDevicesResponse(BiometricService.BiometricWs.ResponseMessage @return) {
             this.@return = @return;
         }
     }
@@ -285,23 +346,58 @@ namespace BiometricService.BiometricSvc {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public BiometricService.BiometricSvc.ResponseMessage @return;
+        public BiometricService.BiometricWs.ResponseMessage @return;
         
         public updateUserFingerPrintResponse() {
         }
         
-        public updateUserFingerPrintResponse(BiometricService.BiometricSvc.ResponseMessage @return) {
+        public updateUserFingerPrintResponse(BiometricService.BiometricWs.ResponseMessage @return) {
+            this.@return = @return;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getImputed", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
+    public partial class getImputedRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        public long imputed;
+        
+        public getImputedRequest() {
+        }
+        
+        public getImputedRequest(long imputed) {
+            this.imputed = imputed;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getImputedResponse", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
+    public partial class getImputedResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public BiometricService.BiometricWs.ResponseMessage @return;
+        
+        public getImputedResponse() {
+        }
+        
+        public getImputedResponse(BiometricService.BiometricWs.ResponseMessage @return) {
             this.@return = @return;
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface BiometricWSPortTypeChannel : BiometricService.BiometricSvc.BiometricWSPortType, System.ServiceModel.IClientChannel {
+    public interface BiometricWSPortTypeChannel : BiometricService.BiometricWs.BiometricWSPortType, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class BiometricWSPortTypeClient : System.ServiceModel.ClientBase<BiometricService.BiometricSvc.BiometricWSPortType>, BiometricService.BiometricSvc.BiometricWSPortType {
+    public partial class BiometricWSPortTypeClient : System.ServiceModel.ClientBase<BiometricService.BiometricWs.BiometricWSPortType>, BiometricService.BiometricWs.BiometricWSPortType {
         
         public BiometricWSPortTypeClient() {
         }
@@ -323,51 +419,78 @@ namespace BiometricService.BiometricSvc {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        BiometricService.BiometricSvc.getUsersFromDBResponse BiometricService.BiometricSvc.BiometricWSPortType.getUsersFromDB(BiometricService.BiometricSvc.getUsersFromDBRequest request) {
+        BiometricService.BiometricWs.getUsersFromDBResponse BiometricService.BiometricWs.BiometricWSPortType.getUsersFromDB(BiometricService.BiometricWs.getUsersFromDBRequest request) {
             return base.Channel.getUsersFromDB(request);
         }
         
-        public BiometricService.BiometricSvc.ResponseMessage getUsersFromDB() {
-            BiometricService.BiometricSvc.getUsersFromDBRequest inValue = new BiometricService.BiometricSvc.getUsersFromDBRequest();
-            BiometricService.BiometricSvc.getUsersFromDBResponse retVal = ((BiometricService.BiometricSvc.BiometricWSPortType)(this)).getUsersFromDB(inValue);
+        public BiometricService.BiometricWs.ResponseMessage getUsersFromDB() {
+            BiometricService.BiometricWs.getUsersFromDBRequest inValue = new BiometricService.BiometricWs.getUsersFromDBRequest();
+            BiometricService.BiometricWs.getUsersFromDBResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).getUsersFromDB(inValue);
             return retVal.@return;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        BiometricService.BiometricSvc.updateAttendanceLogsResponse BiometricService.BiometricSvc.BiometricWSPortType.updateAttendanceLogs(BiometricService.BiometricSvc.updateAttendanceLogsRequest request) {
-            return base.Channel.updateAttendanceLogs(request);
+        BiometricService.BiometricWs.updateImputedFingerPrintResponse BiometricService.BiometricWs.BiometricWSPortType.updateImputedFingerPrint(BiometricService.BiometricWs.updateImputedFingerPrintRequest request) {
+            return base.Channel.updateImputedFingerPrint(request);
         }
         
-        public BiometricService.BiometricSvc.ResponseMessage updateAttendanceLogs(string logsList) {
-            BiometricService.BiometricSvc.updateAttendanceLogsRequest inValue = new BiometricService.BiometricSvc.updateAttendanceLogsRequest();
-            inValue.logsList = logsList;
-            BiometricService.BiometricSvc.updateAttendanceLogsResponse retVal = ((BiometricService.BiometricSvc.BiometricWSPortType)(this)).updateAttendanceLogs(inValue);
-            return retVal.@return;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        BiometricService.BiometricSvc.getDevicesResponse BiometricService.BiometricSvc.BiometricWSPortType.getDevices(BiometricService.BiometricSvc.getDevicesRequest request) {
-            return base.Channel.getDevices(request);
-        }
-        
-        public BiometricService.BiometricSvc.ResponseMessage getDevices() {
-            BiometricService.BiometricSvc.getDevicesRequest inValue = new BiometricService.BiometricSvc.getDevicesRequest();
-            BiometricService.BiometricSvc.getDevicesResponse retVal = ((BiometricService.BiometricSvc.BiometricWSPortType)(this)).getDevices(inValue);
-            return retVal.@return;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        BiometricService.BiometricSvc.updateUserFingerPrintResponse BiometricService.BiometricSvc.BiometricWSPortType.updateUserFingerPrint(BiometricService.BiometricSvc.updateUserFingerPrintRequest request) {
-            return base.Channel.updateUserFingerPrint(request);
-        }
-        
-        public BiometricService.BiometricSvc.ResponseMessage updateUserFingerPrint(string enrollNumber, int finger, string fingerPrint, int operation) {
-            BiometricService.BiometricSvc.updateUserFingerPrintRequest inValue = new BiometricService.BiometricSvc.updateUserFingerPrintRequest();
+        public BiometricService.BiometricWs.ResponseMessage updateImputedFingerPrint(string enrollNumber, int finger, string fingerPrint, int operation) {
+            BiometricService.BiometricWs.updateImputedFingerPrintRequest inValue = new BiometricService.BiometricWs.updateImputedFingerPrintRequest();
             inValue.enrollNumber = enrollNumber;
             inValue.finger = finger;
             inValue.fingerPrint = fingerPrint;
             inValue.operation = operation;
-            BiometricService.BiometricSvc.updateUserFingerPrintResponse retVal = ((BiometricService.BiometricSvc.BiometricWSPortType)(this)).updateUserFingerPrint(inValue);
+            BiometricService.BiometricWs.updateImputedFingerPrintResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).updateImputedFingerPrint(inValue);
+            return retVal.@return;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        BiometricService.BiometricWs.updateAttendanceLogsResponse BiometricService.BiometricWs.BiometricWSPortType.updateAttendanceLogs(BiometricService.BiometricWs.updateAttendanceLogsRequest request) {
+            return base.Channel.updateAttendanceLogs(request);
+        }
+        
+        public BiometricService.BiometricWs.ResponseMessage updateAttendanceLogs(string logsList) {
+            BiometricService.BiometricWs.updateAttendanceLogsRequest inValue = new BiometricService.BiometricWs.updateAttendanceLogsRequest();
+            inValue.logsList = logsList;
+            BiometricService.BiometricWs.updateAttendanceLogsResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).updateAttendanceLogs(inValue);
+            return retVal.@return;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        BiometricService.BiometricWs.getDevicesResponse BiometricService.BiometricWs.BiometricWSPortType.getDevices(BiometricService.BiometricWs.getDevicesRequest request) {
+            return base.Channel.getDevices(request);
+        }
+        
+        public BiometricService.BiometricWs.ResponseMessage getDevices() {
+            BiometricService.BiometricWs.getDevicesRequest inValue = new BiometricService.BiometricWs.getDevicesRequest();
+            BiometricService.BiometricWs.getDevicesResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).getDevices(inValue);
+            return retVal.@return;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        BiometricService.BiometricWs.updateUserFingerPrintResponse BiometricService.BiometricWs.BiometricWSPortType.updateUserFingerPrint(BiometricService.BiometricWs.updateUserFingerPrintRequest request) {
+            return base.Channel.updateUserFingerPrint(request);
+        }
+        
+        public BiometricService.BiometricWs.ResponseMessage updateUserFingerPrint(string enrollNumber, int finger, string fingerPrint, int operation) {
+            BiometricService.BiometricWs.updateUserFingerPrintRequest inValue = new BiometricService.BiometricWs.updateUserFingerPrintRequest();
+            inValue.enrollNumber = enrollNumber;
+            inValue.finger = finger;
+            inValue.fingerPrint = fingerPrint;
+            inValue.operation = operation;
+            BiometricService.BiometricWs.updateUserFingerPrintResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).updateUserFingerPrint(inValue);
+            return retVal.@return;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        BiometricService.BiometricWs.getImputedResponse BiometricService.BiometricWs.BiometricWSPortType.getImputed(BiometricService.BiometricWs.getImputedRequest request) {
+            return base.Channel.getImputed(request);
+        }
+        
+        public BiometricService.BiometricWs.ResponseMessage getImputed(long imputed) {
+            BiometricService.BiometricWs.getImputedRequest inValue = new BiometricService.BiometricWs.getImputedRequest();
+            inValue.imputed = imputed;
+            BiometricService.BiometricWs.getImputedResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).getImputed(inValue);
             return retVal.@return;
         }
     }

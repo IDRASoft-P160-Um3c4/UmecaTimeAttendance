@@ -26,7 +26,6 @@ namespace FingerprintEnrollment
             long.TryParse(i, out _imputed);
             long.TryParse(u, out _user);
 
-
             _imputed = 1;
             _user = 4;
             
@@ -62,14 +61,13 @@ namespace FingerprintEnrollment
                 if (MessageBox.Show(@"¿Desea eliminar la huella digital capturada?", "", MessageBoxButtons.YesNo) ==
                     DialogResult.No)
                 {
-                    CheckBoxState(chk, false);
+                    CheckBoxState(chk, true);
+                    return;
                 }
                 _service.UpdateImputedFingerPrint(_user, enrollName, finger, null, Service.FingerPrintOperation.Delete, deviceId);
             }
             else
             {
-                
-
                 var frm = new FrmEnroll();
                 frm.Show(this);
                 Work();

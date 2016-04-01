@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="50590227-8a6b-40e2-b01c-918a46f41452" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="bb3863b1-5cab-4194-8969-ff445e04c1b4" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -18,10 +18,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://192.168.1.12:8084/Umeca/services/BiometricWS?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8089/services/BiometricWS?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="BiometricWS.wsdl" MetadataType="Wsdl" ID="8931ea29-106c-4a6c-a8b6-ab502d34d82e" SourceId="1" SourceUrl="http://192.168.1.12:8084/Umeca/services/BiometricWS?wsdl" />
+    <MetadataFile FileName="BiometricWS.wsdl" MetadataType="Wsdl" ID="5ddd8bdd-9b56-4341-b45b-28bd12f0387b" SourceId="1" SourceUrl="http://localhost:8089/services/BiometricWS?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -59,7 +59,7 @@
     <Compile Include="EnrollEventArgs.cs" />
     <Compile Include="EnrollEventHandler.cs" />
     <Compile Include="FingerPrint.cs" />
-    <Compile Include="Service References\BiometricSvc\Reference.cs">
+    <Compile Include="Service References\BiometricWs\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -85,22 +85,22 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Service References\BiometricSvc\BiometricService.BiometricSvc.ResponseMessage.datasource">
+    <None Include="Service References\BiometricWs\BiometricService.BiometricWs.ResponseMessage.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\BiometricSvc\BiometricWS.wsdl" />
+    <None Include="Service References\BiometricWs\BiometricWS.wsdl" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\BiometricSvc\" />
+    <WCFMetadataStorage Include="Service References\BiometricWs\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\BiometricSvc\configuration91.svcinfo" />
+    <None Include="Service References\BiometricWs\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\BiometricSvc\configuration.svcinfo" />
+    <None Include="Service References\BiometricWs\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\BiometricSvc\Reference.svcmap">
+    <None Include="Service References\BiometricWs\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

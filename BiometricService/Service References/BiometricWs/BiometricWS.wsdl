@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax23="http://model.infrastructure.umeca.com/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://ws.umeca.com" xmlns:ns1="http://org.apache.axis2/xsd" targetNamespace="http://ws.umeca.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:documentation>BiometricWS</wsdl:documentation>
+  <wsdl:documentation />
   <wsdl:types>
     <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://model.infrastructure.umeca.com/xsd">
       <xs:complexType name="ResponseMessage">
@@ -23,6 +23,20 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="getImputed">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="imputed" type="xs:long" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getImputedResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ResponseMessage" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="getUsersFromDBResponse">
         <xs:complexType>
           <xs:sequence>
@@ -38,6 +52,23 @@
         </xs:complexType>
       </xs:element>
       <xs:element name="updateAttendanceLogsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ResponseMessage" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="updateImputedFingerPrint">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="enrollNumber" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="finger" type="xs:int" />
+            <xs:element minOccurs="0" name="fingerPrint" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="operation" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="updateImputedFingerPrintResponse">
         <xs:complexType>
           <xs:sequence>
             <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ResponseMessage" />
@@ -67,6 +98,12 @@
   <wsdl:message name="getUsersFromDBResponse">
     <wsdl:part name="parameters" element="ns:getUsersFromDBResponse" />
   </wsdl:message>
+  <wsdl:message name="updateImputedFingerPrintRequest">
+    <wsdl:part name="parameters" element="ns:updateImputedFingerPrint" />
+  </wsdl:message>
+  <wsdl:message name="updateImputedFingerPrintResponse">
+    <wsdl:part name="parameters" element="ns:updateImputedFingerPrintResponse" />
+  </wsdl:message>
   <wsdl:message name="updateAttendanceLogsRequest">
     <wsdl:part name="parameters" element="ns:updateAttendanceLogs" />
   </wsdl:message>
@@ -83,10 +120,20 @@
   <wsdl:message name="updateUserFingerPrintResponse">
     <wsdl:part name="parameters" element="ns:updateUserFingerPrintResponse" />
   </wsdl:message>
+  <wsdl:message name="getImputedRequest">
+    <wsdl:part name="parameters" element="ns:getImputed" />
+  </wsdl:message>
+  <wsdl:message name="getImputedResponse">
+    <wsdl:part name="parameters" element="ns:getImputedResponse" />
+  </wsdl:message>
   <wsdl:portType name="BiometricWSPortType">
     <wsdl:operation name="getUsersFromDB">
       <wsdl:input wsaw:Action="urn:getUsersFromDB" message="ns:getUsersFromDBRequest" />
       <wsdl:output wsaw:Action="urn:getUsersFromDBResponse" message="ns:getUsersFromDBResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="updateImputedFingerPrint">
+      <wsdl:input wsaw:Action="urn:updateImputedFingerPrint" message="ns:updateImputedFingerPrintRequest" />
+      <wsdl:output wsaw:Action="urn:updateImputedFingerPrintResponse" message="ns:updateImputedFingerPrintResponse" />
     </wsdl:operation>
     <wsdl:operation name="updateAttendanceLogs">
       <wsdl:input wsaw:Action="urn:updateAttendanceLogs" message="ns:updateAttendanceLogsRequest" />
@@ -100,11 +147,24 @@
       <wsdl:input wsaw:Action="urn:updateUserFingerPrint" message="ns:updateUserFingerPrintRequest" />
       <wsdl:output wsaw:Action="urn:updateUserFingerPrintResponse" message="ns:updateUserFingerPrintResponse" />
     </wsdl:operation>
+    <wsdl:operation name="getImputed">
+      <wsdl:input wsaw:Action="urn:getImputed" message="ns:getImputedRequest" />
+      <wsdl:output wsaw:Action="urn:getImputedResponse" message="ns:getImputedResponse" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BiometricWSSoap11Binding" type="ns:BiometricWSPortType">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getUsersFromDB">
       <soap:operation soapAction="urn:getUsersFromDB" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateImputedFingerPrint">
+      <soap:operation soapAction="urn:updateImputedFingerPrint" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -139,11 +199,29 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getImputed">
+      <soap:operation soapAction="urn:getImputed" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BiometricWSSoap12Binding" type="ns:BiometricWSPortType">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getUsersFromDB">
       <soap12:operation soapAction="urn:getUsersFromDB" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateImputedFingerPrint">
+      <soap12:operation soapAction="urn:updateImputedFingerPrint" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -178,6 +256,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getImputed">
+      <soap12:operation soapAction="urn:getImputed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BiometricWSHttpBinding" type="ns:BiometricWSPortType">
     <http:binding verb="POST" />
@@ -188,6 +275,15 @@
       </wsdl:input>
       <wsdl:output>
         <mime:content part="getUsersFromDB" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateImputedFingerPrint">
+      <http:operation location="BiometricWS/updateImputedFingerPrint" />
+      <wsdl:input>
+        <mime:content part="updateImputedFingerPrint" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="updateImputedFingerPrint" type="text/xml" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="updateAttendanceLogs">
@@ -217,16 +313,25 @@
         <mime:content part="updateUserFingerPrint" type="text/xml" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getImputed">
+      <http:operation location="BiometricWS/getImputed" />
+      <wsdl:input>
+        <mime:content part="getImputed" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getImputed" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="BiometricWS">
     <wsdl:port name="BiometricWSHttpSoap11Endpoint" binding="ns:BiometricWSSoap11Binding">
-      <soap:address location="http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap11Endpoint/" />
+      <soap:address location="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap11Endpoint/" />
     </wsdl:port>
     <wsdl:port name="BiometricWSHttpSoap12Endpoint" binding="ns:BiometricWSSoap12Binding">
-      <soap12:address location="http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap12Endpoint/" />
+      <soap12:address location="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap12Endpoint/" />
     </wsdl:port>
     <wsdl:port name="BiometricWSHttpEndpoint" binding="ns:BiometricWSHttpBinding">
-      <http:address location="http://192.168.1.12:8084/Umeca/services/BiometricWS.BiometricWSHttpEndpoint/" />
+      <http:address location="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpEndpoint/" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
