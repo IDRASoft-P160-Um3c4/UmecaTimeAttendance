@@ -56,9 +56,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(30, 28);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(340, 13);
+            this.label1.Size = new System.Drawing.Size(346, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Ingrese la dirección del servicio web a la que se conectará la apliación";
+            this.label1.Text = "Ingrese la dirección del servicio web a la que se conectará la aplicación";
             // 
             // btnCancel
             // 

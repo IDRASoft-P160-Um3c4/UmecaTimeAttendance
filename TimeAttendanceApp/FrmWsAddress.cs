@@ -12,7 +12,7 @@ namespace TimeAttendanceApp
         {
 
             _service = service;
-            var address = service.GetRemoteAddressWs();
+            var address = Service.GetRemoteAddressWs();
             InitializeComponent();
             txtBoxAddress.Text = address;
         }
@@ -24,7 +24,7 @@ namespace TimeAttendanceApp
             var addresss = txtBoxAddress.Text;
             if (addresss == null || addresss.Equals(""))
             {
-                MessageBox.Show(@"Es necesario introducir la dirección web (URL) del servicio web", @"Valor requerido", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
                 return;
             }
             _service.SetRemoteAddressWs(addresss);

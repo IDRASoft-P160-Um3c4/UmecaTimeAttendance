@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.Deployment.Application;
 using System.Windows.Forms;
 using System.Web;
+using BiometricService;
 
 namespace FingerprintEnrollment
 {
@@ -14,6 +15,12 @@ namespace FingerprintEnrollment
         [STAThread]
         static void Main()
         {
+            if (string.IsNullOrEmpty(Service.GetRemoteAddressWs()))
+            {
+                MessageBox.Show(null, @"No se ha configurado el servicio, ir a la aplicación TimeAttendance para realizarlo.", @"Enrolamiento de Imputados", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMain(GetQueryStringParameters()));

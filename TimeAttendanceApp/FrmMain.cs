@@ -30,6 +30,14 @@ namespace TimeAttendanceApp
         {
             try
             {
+
+                var address = Service.GetRemoteAddressWs();
+                if (address == null || address.Equals(""))
+                {
+                    MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
+                    return;
+                }
+
                 BeginWork();
                 _service.UpdateUsers();
             }
@@ -43,6 +51,12 @@ namespace TimeAttendanceApp
         {
             try
             {
+                var address = Service.GetRemoteAddressWs();
+                if (address == null || address.Equals(""))
+                {
+                    MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
+                    return;
+                }
                 BeginWork();
                 _service.GetAttendanceLog();
             }
@@ -71,6 +85,12 @@ namespace TimeAttendanceApp
         {
             try
             {
+                var address = Service.GetRemoteAddressWs();
+                if (address == null || address.Equals(""))
+                {
+                    MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
+                    return;
+                }
                 BeginWork();
 
                 var frmFingerPrints = new FrmFingerPrints(_service);
