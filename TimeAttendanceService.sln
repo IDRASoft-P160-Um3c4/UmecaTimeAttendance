@@ -3,15 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeAttendanceService", "TimeAttendanceService\TimeAttendanceService.csproj", "{F833DAE0-CF43-4F7C-90D4-08A15554C3C9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeAttendanceWS", "TimeAttendanceWS\TimeAttendanceWS.csproj", "{B1B7678A-82DF-4878-9280-E11823339B7F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeAttendanceApp", "TimeAttendanceApp\TimeAttendanceApp.csproj", "{1ADAD4CF-ED34-4563-A9A9-754D61ED3633}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerificationAttendanceApp", "VerificationAttendanceApp\VerificationAttendanceApp.csproj", "{4A7B5B20-6D5A-4005-A937-402660CE03FF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rx", "Rx\Rx.csproj", "{69CB967E-EFC1-46D7-9F41-B42746A87A47}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FingerprintEnrollment", "FingerprintEnrollment\FingerprintEnrollment.csproj", "{FD8FBB64-07ED-4DE5-AFF0-5066FFE57617}"
 EndProject
@@ -23,26 +15,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F833DAE0-CF43-4F7C-90D4-08A15554C3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F833DAE0-CF43-4F7C-90D4-08A15554C3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F833DAE0-CF43-4F7C-90D4-08A15554C3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F833DAE0-CF43-4F7C-90D4-08A15554C3C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1B7678A-82DF-4878-9280-E11823339B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1B7678A-82DF-4878-9280-E11823339B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1B7678A-82DF-4878-9280-E11823339B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1B7678A-82DF-4878-9280-E11823339B7F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1ADAD4CF-ED34-4563-A9A9-754D61ED3633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1ADAD4CF-ED34-4563-A9A9-754D61ED3633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1ADAD4CF-ED34-4563-A9A9-754D61ED3633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1ADAD4CF-ED34-4563-A9A9-754D61ED3633}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4A7B5B20-6D5A-4005-A937-402660CE03FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4A7B5B20-6D5A-4005-A937-402660CE03FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4A7B5B20-6D5A-4005-A937-402660CE03FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4A7B5B20-6D5A-4005-A937-402660CE03FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{69CB967E-EFC1-46D7-9F41-B42746A87A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69CB967E-EFC1-46D7-9F41-B42746A87A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69CB967E-EFC1-46D7-9F41-B42746A87A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69CB967E-EFC1-46D7-9F41-B42746A87A47}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FD8FBB64-07ED-4DE5-AFF0-5066FFE57617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FD8FBB64-07ED-4DE5-AFF0-5066FFE57617}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD8FBB64-07ED-4DE5-AFF0-5066FFE57617}.Release|Any CPU.ActiveCfg = Release|Any CPU
