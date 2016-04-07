@@ -34,7 +34,7 @@ namespace TimeAttendanceApp
                 var address = Service.GetRemoteAddressWs();
                 if (address == null || address.Equals(""))
                 {
-                    MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
+                    MessageBox.Show(Constants.WS_MSG_ERROR, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
 
@@ -54,7 +54,7 @@ namespace TimeAttendanceApp
                 var address = Service.GetRemoteAddressWs();
                 if (address == null || address.Equals(""))
                 {
-                    MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
+                    MessageBox.Show(Constants.WS_MSG_ERROR, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
                 BeginWork();
@@ -66,6 +66,7 @@ namespace TimeAttendanceApp
             }
         }
 
+        // ReSharper disable once UnusedMember.Local
         private readonly IDictionary<int, string> _messageError = new Dictionary<int, string>
         {
             {-100, "Operation failed or data not exist"},
@@ -88,7 +89,7 @@ namespace TimeAttendanceApp
                 var address = Service.GetRemoteAddressWs();
                 if (address == null || address.Equals(""))
                 {
-                    MessageBox.Show(Constants.WS_MSG_ERROR, "Error");
+                    MessageBox.Show(Constants.WS_MSG_ERROR, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     return;
                 }
                 BeginWork();
@@ -111,6 +112,25 @@ namespace TimeAttendanceApp
 
                 var frmWsAddress = new FrmWsAddress(_service);
                 frmWsAddress.ShowDialog(this);
+            }
+            finally
+            {
+                EndWork();
+            }
+        }
+
+        private void btnImputed_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var address = Service.GetRemoteAddressWs();
+                if (address == null || address.Equals(""))
+                {
+                    MessageBox.Show(Constants.WS_MSG_ERROR, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+                BeginWork();
+                _service.GetImputedLog();
             }
             finally
             {

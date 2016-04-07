@@ -15,7 +15,7 @@ namespace TimeAttendanceApp
 
             _service = service;
 
-            cboDevices.DataSource = service.Devices;
+            cboDevices.DataSource = service.Devices(DeviceType.Employee);
             cboDevices.ValueMember = "Id";
             cboDevices.DisplayMember = "Name";
 
@@ -35,7 +35,11 @@ namespace TimeAttendanceApp
 
         private void FrmFingerPrints_Load(object sender, EventArgs e)
         {
-
+            if (cboDevices.Items.Count == 0)
+            {
+                MessageBox.Show(this, @"No hay dispositivos biométricos disponibles, vaya a la sección ""Configuración de dispositivos biométricos"" en el portal para agregar alguno. ", @"Enrolamiento de Empleados", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                Close();
+            }
         }
 
         public void Work()

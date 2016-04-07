@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax23="http://model.infrastructure.umeca.com/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns="http://ws.umeca.com" xmlns:ns1="http://org.apache.axis2/xsd" targetNamespace="http://ws.umeca.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:documentation />
+  <wsdl:documentation>BiometricWS</wsdl:documentation>
   <wsdl:types>
     <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://model.infrastructure.umeca.com/xsd">
       <xs:complexType name="ResponseMessage">
@@ -16,6 +16,13 @@
     </xs:schema>
     <xs:schema xmlns:ax24="http://model.infrastructure.umeca.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws.umeca.com">
       <xs:import namespace="http://model.infrastructure.umeca.com/xsd" />
+      <xs:element name="getDevices">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="deviceUse" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="getDevicesResponse">
         <xs:complexType>
           <xs:sequence>
@@ -110,7 +117,9 @@
   <wsdl:message name="updateAttendanceLogsResponse">
     <wsdl:part name="parameters" element="ns:updateAttendanceLogsResponse" />
   </wsdl:message>
-  <wsdl:message name="getDevicesRequest" />
+  <wsdl:message name="getDevicesRequest">
+    <wsdl:part name="parameters" element="ns:getDevices" />
+  </wsdl:message>
   <wsdl:message name="getDevicesResponse">
     <wsdl:part name="parameters" element="ns:getDevicesResponse" />
   </wsdl:message>

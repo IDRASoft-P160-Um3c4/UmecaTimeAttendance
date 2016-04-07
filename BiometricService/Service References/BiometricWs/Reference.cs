@@ -32,9 +32,10 @@ namespace BiometricService.BiometricWs {
         [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         BiometricService.BiometricWs.updateAttendanceLogsResponse updateAttendanceLogs(BiometricService.BiometricWs.updateAttendanceLogsRequest request);
         
-        // CODEGEN: Generating message contract since the operation getDevices is neither RPC nor document wrapped.
+        // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="urn:getDevices", ReplyAction="urn:getDevicesResponse")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
         BiometricService.BiometricWs.getDevicesResponse getDevices(BiometricService.BiometricWs.getDevicesRequest request);
         
         // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
@@ -282,10 +283,18 @@ namespace BiometricService.BiometricWs {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="getDevices", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
     public partial class getDevicesRequest {
         
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string deviceUse;
+        
         public getDevicesRequest() {
+        }
+        
+        public getDevicesRequest(string deviceUse) {
+            this.deviceUse = deviceUse;
         }
     }
     
@@ -461,8 +470,9 @@ namespace BiometricService.BiometricWs {
             return base.Channel.getDevices(request);
         }
         
-        public BiometricService.BiometricWs.ResponseMessage getDevices() {
+        public BiometricService.BiometricWs.ResponseMessage getDevices(string deviceUse) {
             BiometricService.BiometricWs.getDevicesRequest inValue = new BiometricService.BiometricWs.getDevicesRequest();
+            inValue.deviceUse = deviceUse;
             BiometricService.BiometricWs.getDevicesResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).getDevices(inValue);
             return retVal.@return;
         }

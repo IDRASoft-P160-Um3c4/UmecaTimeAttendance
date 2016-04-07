@@ -10,6 +10,12 @@ using Newtonsoft.Json;
 
 namespace BiometricService
 {
+    public enum DeviceType
+    {
+        Employee = 1,
+        Imputed = 2
+    }
+
     public class Service
     {
         public event EnrollEventHandler EnrollCompleted;
@@ -36,21 +42,20 @@ namespace BiometricService
         public List<UserInfo> UsersInfo { get; private set; } = new List<UserInfo>();
         public UserInfo ImputedInfo { get; private set; } = new UserInfo();
 
-        public List<Device> Devices
+        public List<Device> Devices(DeviceType deviceType)
         {
-            get
-            {
-                GetDevices();
+            
+                GetDevices(deviceType);
                 return _devices;
-            }
+   
         }
-        private void GetDevices()
+        private void GetDevices(DeviceType deviceType)
         {
 
             using (var biometricSvc = GetNewBiometricWsPortTypeClient())
             {
                 if (biometricSvc == null) return;
-                var data = biometricSvc.getDevices();
+                var data = biometricSvc.getDevices(deviceType.ToString());
                 _devices = JsonConvert.DeserializeObject<List<Device>>(data.data);
                 biometricSvc.Close();
             }
@@ -76,7 +81,7 @@ namespace BiometricService
             GetUsersFromDb();
             var n = 0;
 
-            foreach (var device in Devices)
+            foreach (var device in Devices(DeviceType.Employee))
             {
                 Connect(device);
                 _service.EnableDevice(MachineNumber, false);
@@ -116,10 +121,10 @@ namespace BiometricService
         public void GetImputedLog()
         {
             GetUsersFromDb();
-            GetDevices();
+            GetDevices(DeviceType.Imputed);
             var attendanceLogs = new List<AttendanceLog>();
 
-            foreach (var device in Devices)
+            foreach (var device in _devices)
             {
                 Connect(device);
 
@@ -154,7 +159,7 @@ namespace BiometricService
                     biometricSvc.Close();
                 }
 
-            foreach (var device in Devices)
+            foreach (var device in _devices)
             {
                 Connect(device);
                 attendanceLogs.Clear();
@@ -175,10 +180,10 @@ namespace BiometricService
         public void GetAttendanceLog()
         {
             GetUsersFromDb();
-            GetDevices();
+            GetDevices(DeviceType.Employee);
             var attendanceLogs = new List<AttendanceLog>();
 
-            foreach (var device in Devices)
+            foreach (var device in _devices)
             {
                 Connect(device);
 
@@ -218,7 +223,7 @@ namespace BiometricService
 
                
 
-            foreach (var device in Devices)
+            foreach (var device in _devices)
             {
                 Connect(device);
                 attendanceLogs.Clear();
@@ -250,7 +255,7 @@ namespace BiometricService
 
 
             n = 0;
-            foreach (var device in Devices)
+            foreach (var device in _devices)
             {
                 Connect(device);
 
@@ -279,7 +284,7 @@ namespace BiometricService
 
         public void Enroll(long deviceId, string userId, int finger)
         {
-            var device = Devices.FirstOrDefault(d => d.id == deviceId);
+            var device = Devices(DeviceType.Imputed).FirstOrDefault(d => d.id == deviceId);
             if (device == null)
                 return;
             _service = new CZKEMClass();
@@ -338,7 +343,7 @@ namespace BiometricService
         }
 
         public void UpdateImputedFingerPrint(long user, string enrollNumber, int finger, string fingerPrint,
-            FingerPrintOperation operation, long deviceId)
+            FingerPrintOperation operation)
         {
             var name = UsersInfo.FirstOrDefault(u => u.EnrollNumber == enrollNumber)?.Name ?? "";
             var n = 0;
@@ -351,30 +356,32 @@ namespace BiometricService
             }
 
             n = 0;
-            var device = Devices.FirstOrDefault(d => d.id == deviceId);
-
-            Connect(device);
-
-            _service.RefreshData(MachineNumber);
-            if (operation == FingerPrintOperation.Update)
+            
+            foreach (var device in Devices(DeviceType.Imputed))
             {
-                if (_service.SSR_SetUserInfo(MachineNumber, enrollNumber, name, "", 0, true))
+                Connect(device);
+
+                _service.RefreshData(MachineNumber);
+                if (operation == FingerPrintOperation.Update)
                 {
-                    if (_service.SetUserTmpExStr(MachineNumber, enrollNumber, finger, 1, fingerPrint))
+                    if (_service.SSR_SetUserInfo(MachineNumber, enrollNumber, name, "", 0, true))
+                    {
+                        if (_service.SetUserTmpExStr(MachineNumber, enrollNumber, finger, 1, fingerPrint))
+                        {
+                            n++;
+                        }
+                    }
+                }
+                else
+                {
+                    if (_service.SSR_DelUserTmpExt(MachineNumber, enrollNumber, finger))
                     {
                         n++;
                     }
                 }
-            }
-            else
-            {
-                if (_service.SSR_DelUserTmpExt(MachineNumber, enrollNumber, finger))
-                {
-                    n++;
-                }
-            }
 
-            Disconnect();
+                Disconnect();
+            }
         }
 
         private void ReadUsersInternal(Device device)
@@ -428,7 +435,7 @@ namespace BiometricService
 
         public void ReadUsers()
         {
-            GetDevices();
+            GetDevices(DeviceType.Employee);
 
             foreach (var device in _devices)
             {

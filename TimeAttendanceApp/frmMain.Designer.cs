@@ -32,6 +32,7 @@
             this.btnEnroll = new System.Windows.Forms.Button();
             this.btnAssistence = new System.Windows.Forms.Button();
             this.btnWsAddress = new System.Windows.Forms.Button();
+            this.btnImputed = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSyncUsers
@@ -66,19 +67,30 @@
             // 
             // btnWsAddress
             // 
-            this.btnWsAddress.Location = new System.Drawing.Point(13, 256);
+            this.btnWsAddress.Location = new System.Drawing.Point(13, 333);
             this.btnWsAddress.Name = "btnWsAddress";
             this.btnWsAddress.Size = new System.Drawing.Size(377, 71);
-            this.btnWsAddress.TabIndex = 3;
+            this.btnWsAddress.TabIndex = 4;
             this.btnWsAddress.Text = "Dirección del servicio web";
             this.btnWsAddress.UseVisualStyleBackColor = true;
             this.btnWsAddress.Click += new System.EventHandler(this.btnWsAddress_Click);
+            // 
+            // btnImputed
+            // 
+            this.btnImputed.Location = new System.Drawing.Point(12, 256);
+            this.btnImputed.Name = "btnImputed";
+            this.btnImputed.Size = new System.Drawing.Size(377, 71);
+            this.btnImputed.TabIndex = 3;
+            this.btnImputed.Text = "Obtener Asistencia de Imputados";
+            this.btnImputed.UseVisualStyleBackColor = true;
+            this.btnImputed.Click += new System.EventHandler(this.btnImputed_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 348);
+            this.ClientSize = new System.Drawing.Size(402, 416);
+            this.Controls.Add(this.btnImputed);
             this.Controls.Add(this.btnWsAddress);
             this.Controls.Add(this.btnAssistence);
             this.Controls.Add(this.btnEnroll);
@@ -98,6 +110,7 @@
         private System.Windows.Forms.Button btnEnroll;
         private System.Windows.Forms.Button btnAssistence;
         private System.Windows.Forms.Button btnWsAddress;
+        private System.Windows.Forms.Button btnImputed;
     }
 }
 

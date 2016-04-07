@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using BiometricService;
 
@@ -16,7 +17,7 @@ namespace FingerprintEnrollment
             _args = args;
             InitializeComponent();
 
-            cboDevices.DataSource = _service.Devices;
+            cboDevices.DataSource = _service.Devices(DeviceType.Imputed);
             cboDevices.ValueMember = "Id";
             cboDevices.DisplayMember = "Name";
 
@@ -56,15 +57,26 @@ namespace FingerprintEnrollment
             var value = !chk.Checked;
             var deviceId = long.Parse(cboDevices.SelectedValue.ToString());
 
+            var device = _service.Devices(DeviceType.Imputed).First(d => d.id == deviceId);
+
+            if (!device.IsAlive())
+            {
+                CheckBoxState(chk, value);
+                MessageBox.Show(this,
+                    string.Format(@"El dispositivo biométrico ""{0}"" no se encuentra disponible o no es accesible",
+                        device.name), @"Enrolamiento de Imputados", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                return;
+            }
+
             if (value)
             {
-                if (MessageBox.Show(@"¿Desea eliminar la huella digital capturada?", "", MessageBoxButtons.YesNo) ==
+                if (MessageBox.Show(@"¿Desea eliminar la huella digital capturada?", @"Enrolamiento de Imputados", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button2) ==
                     DialogResult.No)
                 {
                     CheckBoxState(chk, true);
                     return;
                 }
-                _service.UpdateImputedFingerPrint(_user, enrollName, finger, null, Service.FingerPrintOperation.Delete, deviceId);
+                _service.UpdateImputedFingerPrint(_user, enrollName, finger, null, Service.FingerPrintOperation.Delete);
             }
             else
             {
@@ -83,7 +95,7 @@ namespace FingerprintEnrollment
                         return;
                     }
 
-                    _service.UpdateImputedFingerPrint(_user, enrollName, args.Finger, args.FingerPrint, Service.FingerPrintOperation.Update, deviceId);
+                    _service.UpdateImputedFingerPrint(_user, enrollName, args.Finger, args.FingerPrint, Service.FingerPrintOperation.Update);
                 };
 
                 _service.Enroll(deviceId, enrollName, finger);
