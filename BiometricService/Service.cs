@@ -113,6 +113,65 @@ namespace BiometricService
             Delete
         }
 
+        public void GetImputedLog()
+        {
+            GetUsersFromDb();
+            GetDevices();
+            var attendanceLogs = new List<AttendanceLog>();
+
+            foreach (var device in Devices)
+            {
+                Connect(device);
+
+                _service.EnableDevice(MachineNumber, false);//disable the device
+                if (_service.ReadGeneralLogData(MachineNumber))//read all the attendance records to the memory
+                {
+                    int verifyMode, inOutMode, year, month, day, hour, minute, second, workcode = 0;
+                    string enrollNumber;
+                    while (_service.SSR_GetGeneralLogData(MachineNumber, out enrollNumber, out verifyMode,
+                               out inOutMode, out year, out month, out day, out hour, out minute, out second, ref workcode))//get records from the memory
+                    {
+                        attendanceLogs.Add(new AttendanceLog { EnrollNumber = enrollNumber, Date = new DateTime(year, month, day, hour, minute, second), InOutMode = inOutMode, VerifyMode = verifyMode, WorkCode = inOutMode });
+                    }
+                }
+                else
+                {
+                    ViewError();
+                }
+                _service.EnableDevice(MachineNumber, true);//enable the device
+
+                Disconnect();
+            }
+
+            var enrollNumbers = UsersInfo.Select(u => u.EnrollNumber.ToString()).Distinct().ToList();
+            attendanceLogs = attendanceLogs.Where(a => enrollNumbers.Contains(a.EnrollNumber)).ToList();
+
+            if (attendanceLogs.Count > 0)
+                using (var biometricSvc = GetNewBiometricWsPortTypeClient())
+                {
+                    if (biometricSvc == null) return;
+                    biometricSvc.updateAttendanceLogs(JsonConvert.SerializeObject(attendanceLogs));
+                    biometricSvc.Close();
+                }
+
+            foreach (var device in Devices)
+            {
+                Connect(device);
+                attendanceLogs.Clear();
+                _service.EnableDevice(MachineNumber, false);//disable the device
+                if (_service.ClearGLog(MachineNumber))
+                {
+                    _service.RefreshData(MachineNumber);//the data in the device should be refreshed
+                }
+                //else
+                //{
+                //    _service.GetLastError(ref idwErrorCode);
+                //}
+                _service.EnableDevice(MachineNumber, true);//enable the device
+                Disconnect();
+            }
+        }
+
         public void GetAttendanceLog()
         {
             GetUsersFromDb();
