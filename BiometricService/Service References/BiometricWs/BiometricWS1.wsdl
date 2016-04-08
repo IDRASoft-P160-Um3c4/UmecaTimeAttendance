@@ -44,6 +44,13 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="getImputedUsersFromDBResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ResponseMessage" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="getUsersFromDBResponse">
         <xs:complexType>
           <xs:sequence>
@@ -129,6 +136,10 @@
   <wsdl:message name="updateUserFingerPrintResponse">
     <wsdl:part name="parameters" element="ns:updateUserFingerPrintResponse" />
   </wsdl:message>
+  <wsdl:message name="getImputedUsersFromDBRequest" />
+  <wsdl:message name="getImputedUsersFromDBResponse">
+    <wsdl:part name="parameters" element="ns:getImputedUsersFromDBResponse" />
+  </wsdl:message>
   <wsdl:message name="getImputedRequest">
     <wsdl:part name="parameters" element="ns:getImputed" />
   </wsdl:message>
@@ -155,6 +166,10 @@
     <wsdl:operation name="updateUserFingerPrint">
       <wsdl:input wsaw:Action="urn:updateUserFingerPrint" message="ns:updateUserFingerPrintRequest" />
       <wsdl:output wsaw:Action="urn:updateUserFingerPrintResponse" message="ns:updateUserFingerPrintResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getImputedUsersFromDB">
+      <wsdl:input wsaw:Action="urn:getImputedUsersFromDB" message="ns:getImputedUsersFromDBRequest" />
+      <wsdl:output wsaw:Action="urn:getImputedUsersFromDBResponse" message="ns:getImputedUsersFromDBResponse" />
     </wsdl:operation>
     <wsdl:operation name="getImputed">
       <wsdl:input wsaw:Action="urn:getImputed" message="ns:getImputedRequest" />
@@ -201,6 +216,15 @@
     </wsdl:operation>
     <wsdl:operation name="updateUserFingerPrint">
       <soap:operation soapAction="urn:updateUserFingerPrint" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getImputedUsersFromDB">
+      <soap:operation soapAction="urn:getImputedUsersFromDB" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -265,6 +289,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getImputedUsersFromDB">
+      <soap12:operation soapAction="urn:getImputedUsersFromDB" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getImputed">
       <soap12:operation soapAction="urn:getImputed" style="document" />
       <wsdl:input>
@@ -322,6 +355,15 @@
         <mime:content part="updateUserFingerPrint" type="text/xml" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getImputedUsersFromDB">
+      <http:operation location="BiometricWS/getImputedUsersFromDB" />
+      <wsdl:input>
+        <mime:content part="getImputedUsersFromDB" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getImputedUsersFromDB" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="getImputed">
       <http:operation location="BiometricWS/getImputed" />
       <wsdl:input>
@@ -334,13 +376,13 @@
   </wsdl:binding>
   <wsdl:service name="BiometricWS">
     <wsdl:port name="BiometricWSHttpSoap11Endpoint" binding="ns:BiometricWSSoap11Binding">
-      <soap:address location="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap11Endpoint/" />
+      <soap:address location="http://192.168.1.16:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap11Endpoint/" />
     </wsdl:port>
     <wsdl:port name="BiometricWSHttpSoap12Endpoint" binding="ns:BiometricWSSoap12Binding">
-      <soap12:address location="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpSoap12Endpoint/" />
+      <soap12:address location="http://192.168.1.16:8084/Umeca/services/BiometricWS.BiometricWSHttpSoap12Endpoint/" />
     </wsdl:port>
     <wsdl:port name="BiometricWSHttpEndpoint" binding="ns:BiometricWSHttpBinding">
-      <http:address location="http://169.254.59.46:8089/services/BiometricWS.BiometricWSHttpEndpoint/" />
+      <http:address location="http://192.168.1.16:8084/Umeca/services/BiometricWS.BiometricWSHttpEndpoint/" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

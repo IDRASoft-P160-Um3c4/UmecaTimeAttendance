@@ -33,6 +33,7 @@
             this.btnAssistence = new System.Windows.Forms.Button();
             this.btnWsAddress = new System.Windows.Forms.Button();
             this.btnImputed = new System.Windows.Forms.Button();
+            this.btnSyncImputedUsers = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnSyncUsers
@@ -41,33 +42,33 @@
             this.btnSyncUsers.Name = "btnSyncUsers";
             this.btnSyncUsers.Size = new System.Drawing.Size(377, 71);
             this.btnSyncUsers.TabIndex = 0;
-            this.btnSyncUsers.Text = "Sincronizar Usuarios";
+            this.btnSyncUsers.Text = "Sincronizar Empleados";
             this.btnSyncUsers.UseVisualStyleBackColor = true;
             this.btnSyncUsers.Click += new System.EventHandler(this.btnSyncUsers_Click);
             // 
             // btnEnroll
             // 
-            this.btnEnroll.Location = new System.Drawing.Point(13, 102);
+            this.btnEnroll.Location = new System.Drawing.Point(13, 179);
             this.btnEnroll.Name = "btnEnroll";
             this.btnEnroll.Size = new System.Drawing.Size(377, 71);
             this.btnEnroll.TabIndex = 1;
-            this.btnEnroll.Text = "Enrolamiento de Huellas Digitales";
+            this.btnEnroll.Text = "Enrolamiento de Huellas Digitales de Empleados";
             this.btnEnroll.UseVisualStyleBackColor = true;
             this.btnEnroll.Click += new System.EventHandler(this.btnEnroll_Click);
             // 
             // btnAssistence
             // 
-            this.btnAssistence.Location = new System.Drawing.Point(13, 179);
+            this.btnAssistence.Location = new System.Drawing.Point(13, 256);
             this.btnAssistence.Name = "btnAssistence";
             this.btnAssistence.Size = new System.Drawing.Size(377, 71);
             this.btnAssistence.TabIndex = 2;
-            this.btnAssistence.Text = "Obtener Control de Asistencia";
+            this.btnAssistence.Text = "Obtener Control de Asistencia de Empleados";
             this.btnAssistence.UseVisualStyleBackColor = true;
             this.btnAssistence.Click += new System.EventHandler(this.btnAssistence_Click);
             // 
             // btnWsAddress
             // 
-            this.btnWsAddress.Location = new System.Drawing.Point(13, 333);
+            this.btnWsAddress.Location = new System.Drawing.Point(13, 410);
             this.btnWsAddress.Name = "btnWsAddress";
             this.btnWsAddress.Size = new System.Drawing.Size(377, 71);
             this.btnWsAddress.TabIndex = 4;
@@ -77,7 +78,7 @@
             // 
             // btnImputed
             // 
-            this.btnImputed.Location = new System.Drawing.Point(12, 256);
+            this.btnImputed.Location = new System.Drawing.Point(12, 333);
             this.btnImputed.Name = "btnImputed";
             this.btnImputed.Size = new System.Drawing.Size(377, 71);
             this.btnImputed.TabIndex = 3;
@@ -85,11 +86,22 @@
             this.btnImputed.UseVisualStyleBackColor = true;
             this.btnImputed.Click += new System.EventHandler(this.btnImputed_Click);
             // 
+            // btnSyncImputedUsers
+            // 
+            this.btnSyncImputedUsers.Location = new System.Drawing.Point(13, 102);
+            this.btnSyncImputedUsers.Name = "btnSyncImputedUsers";
+            this.btnSyncImputedUsers.Size = new System.Drawing.Size(377, 71);
+            this.btnSyncImputedUsers.TabIndex = 5;
+            this.btnSyncImputedUsers.Text = "Sincronizar Imputados";
+            this.btnSyncImputedUsers.UseVisualStyleBackColor = true;
+            this.btnSyncImputedUsers.Click += new System.EventHandler(this.btnSyncImputedUsers_Click);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(402, 416);
+            this.ClientSize = new System.Drawing.Size(402, 493);
+            this.Controls.Add(this.btnSyncImputedUsers);
             this.Controls.Add(this.btnImputed);
             this.Controls.Add(this.btnWsAddress);
             this.Controls.Add(this.btnAssistence);
@@ -111,6 +123,7 @@
         private System.Windows.Forms.Button btnAssistence;
         private System.Windows.Forms.Button btnWsAddress;
         private System.Windows.Forms.Button btnImputed;
+        private System.Windows.Forms.Button btnSyncImputedUsers;
     }
 }
 

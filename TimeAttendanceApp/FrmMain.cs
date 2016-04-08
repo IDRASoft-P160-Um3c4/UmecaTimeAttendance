@@ -137,5 +137,26 @@ namespace TimeAttendanceApp
                 EndWork();
             }
         }
+
+        private void btnSyncImputedUsers_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                var address = Service.GetRemoteAddressWs();
+                if (address == null || address.Equals(""))
+                {
+                    MessageBox.Show(Constants.WS_MSG_ERROR, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    return;
+                }
+
+                BeginWork();
+                _service.UpdateImputedUsers();
+            }
+            finally
+            {
+                EndWork();
+            }
+        }
     }
 }

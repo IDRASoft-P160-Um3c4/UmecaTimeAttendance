@@ -112,6 +112,43 @@ namespace BiometricService
             }
         }
 
+
+        public void UpdateImputedUsers()
+        {
+            GetImputedUsersFromDb();
+            var n = 0;
+
+            foreach (var device in Devices(DeviceType.Imputed))
+            {
+                Connect(device);
+                _service.EnableDevice(MachineNumber, false);
+                if (_service.ClearData(MachineNumber, 5))
+                    _service.RefreshData(MachineNumber);
+
+                foreach (var userInfo in UsersInfo)
+                {
+                    if (_service.SSR_SetUserInfo(MachineNumber, userInfo.EnrollNumber, userInfo.Name, "", 0, true))
+                    {
+                        if (_service.SSR_DeleteEnrollDataExt(MachineNumber, userInfo.EnrollNumber, 11))
+                        {
+                            _service.RefreshData(MachineNumber);
+                            foreach (var fingerPrint in userInfo.FingerPrints)
+                            {
+                                if (_service.SetUserTmpExStr(MachineNumber, userInfo.EnrollNumber, fingerPrint.Finger, 1,
+                                    fingerPrint.Data))
+                                {
+                                    n++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                _service.EnableDevice(MachineNumber, true);
+                Disconnect();
+            }
+        }
+
         public enum FingerPrintOperation
         {
             Update,
@@ -472,6 +509,17 @@ namespace BiometricService
             {
                 if (biometricSvc == null) return;
                 var data = biometricSvc.getUsersFromDB();
+                UsersInfo = JsonConvert.DeserializeObject<List<UserInfo>>(data.data);
+            }
+        }
+
+
+        public void GetImputedUsersFromDb()
+        {
+            using (var biometricSvc = GetNewBiometricWsPortTypeClient())
+            {
+                if (biometricSvc == null) return;
+                var data = biometricSvc.getImputedUsersFromDB();
                 UsersInfo = JsonConvert.DeserializeObject<List<UserInfo>>(data.data);
             }
         }
