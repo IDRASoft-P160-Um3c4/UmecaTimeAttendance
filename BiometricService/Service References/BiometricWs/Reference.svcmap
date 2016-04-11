@@ -18,10 +18,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8084/Umeca/services/BiometricWS?wsdl" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8089/services/BiometricWS?wsdl" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="BiometricWS1.wsdl" MetadataType="Wsdl" ID="05c10eeb-d703-4229-a726-3765815cae48" SourceId="1" SourceUrl="http://localhost:8084/Umeca/services/BiometricWS?wsdl" />
+    <MetadataFile FileName="BiometricWS.wsdl" MetadataType="Wsdl" ID="d5346390-8bcd-4386-bb6a-5a6fa127d02e" SourceId="1" SourceUrl="http://localhost:8089/services/BiometricWS?wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

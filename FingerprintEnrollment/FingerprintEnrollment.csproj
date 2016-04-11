@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>C:\inetpub\sitios\satfm\Test\</PublishUrl>
+    <PublishUrl>C:\Temp\FingerPrintEnrollment\</PublishUrl>
     <Install>false</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -23,13 +23,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://localhost/Test/</InstallUrl>
+    <InstallUrl>http://200.33.79.34/Umeca/assets/applications/TimeAttendanceApp/</InstallUrl>
     <PublisherName>IDRA Soft S.A. de C.V.</PublisherName>
     <SuiteName>Enrolamiento de Imputados</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>instalacion.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>4917F5D8CC9EC14FC11FE16FD5ACD59D10629AAB</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>CB79C56A32530322991A01B5D7B7FEDB419DBD38</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>FingerprintEnrollment_TemporaryKey.pfx</ManifestKeyFile>

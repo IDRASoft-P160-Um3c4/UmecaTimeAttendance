@@ -9,27 +9,30 @@ namespace FingerprintEnrollment
     public partial class frmMain : Form
     {
         private readonly Service _service = new Service();
-        private readonly NameValueCollection _args;
-        private long _imputed, _user;
+        private readonly long _imputed;
+        private readonly long _user;
 
         public frmMain(NameValueCollection args)
         {
-            _args = args;
             InitializeComponent();
 
             cboDevices.DataSource = _service.Devices(DeviceType.Imputed);
             cboDevices.ValueMember = "Id";
             cboDevices.DisplayMember = "Name";
 
-            var i = _args.Get("a");
-            var u = _args.Get("b");
+            var i = args.Get("a");
+            var u = args.Get("b");
 
             long.TryParse(i, out _imputed);
             long.TryParse(u, out _user);
 
-            _imputed = 1;
-            _user = 4;
-            
+
+            if (_imputed == 0 || _user == 0)
+            {
+                MessageBox.Show(this, @"La herramienta para enrolamiento de imputados únicamente puede ser usado desde la entrevista de encuadre.", @"Enrolamiento de imputados", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                End();
+            }
+
             _service.GetImputedFromDb(_imputed);
 
             lblName.Text = _service.ImputedInfo.Name;

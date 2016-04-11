@@ -91,7 +91,7 @@
     <WCFMetadataStorage Include="Service References\BiometricWs\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\BiometricWs\BiometricWS1.wsdl" />
+    <None Include="Service References\BiometricWs\BiometricWS.wsdl" />
     <None Include="Service References\BiometricWs\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>

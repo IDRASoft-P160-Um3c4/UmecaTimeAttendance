@@ -15,6 +15,12 @@ namespace BiometricService.BiometricWs {
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://ws.umeca.com", ConfigurationName="BiometricWs.BiometricWSPortType")]
     public interface BiometricWSPortType {
         
+        // CODEGEN: Parameter 'return' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+        [System.ServiceModel.OperationContractAttribute(Action="urn:updateImputedLogs", ReplyAction="urn:updateImputedLogsResponse")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [return: System.ServiceModel.MessageParameterAttribute(Name="return")]
+        BiometricService.BiometricWs.updateImputedLogsResponse updateImputedLogs(BiometricService.BiometricWs.updateImputedLogsRequest request);
+        
         // CODEGEN: Generating message contract since the operation getUsersFromDB is neither RPC nor document wrapped.
         [System.ServiceModel.OperationContractAttribute(Action="urn:getUsersFromDB", ReplyAction="urn:getUsersFromDBResponse")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -169,6 +175,42 @@ namespace BiometricService.BiometricWs {
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="updateImputedLogs", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
+    public partial class updateImputedLogsRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string logsList;
+        
+        public updateImputedLogsRequest() {
+        }
+        
+        public updateImputedLogsRequest(string logsList) {
+            this.logsList = logsList;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="updateImputedLogsResponse", WrapperNamespace="http://ws.umeca.com", IsWrapped=true)]
+    public partial class updateImputedLogsResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://ws.umeca.com", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public BiometricService.BiometricWs.ResponseMessage @return;
+        
+        public updateImputedLogsResponse() {
+        }
+        
+        public updateImputedLogsResponse(BiometricService.BiometricWs.ResponseMessage @return) {
+            this.@return = @return;
         }
     }
     
@@ -458,6 +500,18 @@ namespace BiometricService.BiometricWs {
         
         public BiometricWSPortTypeClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        BiometricService.BiometricWs.updateImputedLogsResponse BiometricService.BiometricWs.BiometricWSPortType.updateImputedLogs(BiometricService.BiometricWs.updateImputedLogsRequest request) {
+            return base.Channel.updateImputedLogs(request);
+        }
+        
+        public BiometricService.BiometricWs.ResponseMessage updateImputedLogs(string logsList) {
+            BiometricService.BiometricWs.updateImputedLogsRequest inValue = new BiometricService.BiometricWs.updateImputedLogsRequest();
+            inValue.logsList = logsList;
+            BiometricService.BiometricWs.updateImputedLogsResponse retVal = ((BiometricService.BiometricWs.BiometricWSPortType)(this)).updateImputedLogs(inValue);
+            return retVal.@return;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

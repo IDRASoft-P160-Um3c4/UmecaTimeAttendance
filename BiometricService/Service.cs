@@ -157,7 +157,7 @@ namespace BiometricService
 
         public void GetImputedLog()
         {
-            GetUsersFromDb();
+            GetImputedUsersFromDb();
             GetDevices(DeviceType.Imputed);
             var attendanceLogs = new List<AttendanceLog>();
 
@@ -192,7 +192,7 @@ namespace BiometricService
                 using (var biometricSvc = GetNewBiometricWsPortTypeClient())
                 {
                     if (biometricSvc == null) return;
-                    biometricSvc.updateAttendanceLogs(JsonConvert.SerializeObject(attendanceLogs));
+                    biometricSvc.updateImputedLogs(JsonConvert.SerializeObject(attendanceLogs));
                     biometricSvc.Close();
                 }
 
