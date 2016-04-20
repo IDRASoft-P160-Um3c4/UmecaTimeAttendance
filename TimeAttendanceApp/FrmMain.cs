@@ -11,13 +11,13 @@ namespace TimeAttendanceApp
         private readonly Service _service = new Service();
         private void BeginWork()
         {
-            btnSyncUsers.Enabled = btnEnroll.Enabled = btnAssistence.Enabled = false;
+            btnWsAddress.Enabled = btnSyncImputedUsers.Enabled = btnImputed.Enabled = btnSyncUsers.Enabled = btnEnroll.Enabled = btnAssistence.Enabled = false;
             Cursor = Cursors.WaitCursor;
         }
 
         private void EndWork()
         {
-            btnSyncUsers.Enabled = btnEnroll.Enabled = btnAssistence.Enabled = true;
+            btnWsAddress.Enabled = btnSyncImputedUsers.Enabled = btnImputed.Enabled = btnSyncUsers.Enabled = btnEnroll.Enabled = btnAssistence.Enabled = true;
             Cursor = Cursors.Default;
         }
 

@@ -23,13 +23,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://200.33.79.34/Umeca/assets/applications/TimeAttendanceApp/</InstallUrl>
+    <InstallUrl>http://200.33.79.34/Umeca/assets/applications/FingerPrintEnrollment/</InstallUrl>
     <PublisherName>IDRA Soft S.A. de C.V.</PublisherName>
     <SuiteName>Enrolamiento de Imputados</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>instalacion.html</WebPage>
     <TrustUrlParameters>true</TrustUrlParameters>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

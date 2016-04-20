@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <PublishUrl>C:\Projects\TimeAttendanceApp\</PublishUrl>
+    <PublishUrl>C:\Temp\TimeAttendaceApp\</PublishUrl>
     <Install>false</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -23,13 +23,13 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://192.168.1.16:8084/Umeca/assets/applications/TimeAttendanceApp/</InstallUrl>
+    <InstallUrl>http://200.33.79.34/Umeca/assets/applications/TimeAttendanceApp/</InstallUrl>
     <SupportUrl>http://www.idrasoft.com.mx</SupportUrl>
     <PublisherName>IDRA Soft S.A. de C.V.</PublisherName>
     <SuiteName>UMECA - Morelos</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>29</ApplicationRevision>
+    <ApplicationRevision>30</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
